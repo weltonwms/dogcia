@@ -9,7 +9,8 @@ use Collective\Html\Eloquent\FormAccessible;
 class Venda extends Model
 {
     use FormAccessible;
-    protected $fillable=['cliente_id','data_venda','observacao'];
+    protected $fillable=['cliente_id','data_venda','frete', 'status', 
+    'carteira' ,'forma_pagamento', 'vendedor_id', 'observacao'];
     protected $dates = array('data_venda');
     
     
@@ -17,12 +18,16 @@ class Venda extends Model
     {
         return $this->belongsToMany('App\Produto')
                 ->using('App\ProdutoVenda')
-                ->withPivot('qtd', 'valor_venda')
+                ->withPivot('qtd', 'valor_venda','granel')
                 ->withTimestamps();
     }
     
     public function cliente(){
         return $this->belongsTo("App\Cliente");
+    }
+
+    public function seller(){
+        return $this->belongsTo("App\Seller");
     }
     
      public function getDataVendaAttribute($value)
@@ -59,6 +64,7 @@ class Venda extends Model
              $x= new \stdClass();
              $x->produto_id=$produto->id;
              $x->qtd=$produto->pivot->qtd;
+             $x->granel=$produto->pivot->granel;
              $x->valor_venda=$produto->pivot->valor_venda;
              $list[]=$x;
          endforeach;

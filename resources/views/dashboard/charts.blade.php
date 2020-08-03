@@ -1,5 +1,5 @@
 <input type="hidden" value="{{$vendasMensais}}" id="vendasMensais" />
-<input type="hidden" value="{{$rentsMensais}}" id="rentsMensais" />
+
 
 <div class="row">
     <div class="col-md-6">
@@ -10,14 +10,9 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="tile">
-        <h3 class="tile-title"><i class="fa fa-taxi"></i> Alugueis Mensais</h3>
-        <div class="embed-responsive embed-responsive-16by9">
-          <canvas class="embed-responsive-item" id="lineChartRents"></canvas>
-        </div>
-      </div>
-    </div>
+    
+
+
   </div>
 
   @push('scripts')
@@ -64,8 +59,7 @@ function getDados(modelId){
   (function start(){
     var dados= getDados("#vendasMensais");
     writeChart(dados.labels,dados.values, "#lineChartVendas");
-    var dados2= getDados("#rentsMensais");
-    writeChart(dados2.labels,dados2.values, "#lineChartRents");
+   
   })();
 
   

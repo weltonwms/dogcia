@@ -27,8 +27,8 @@
           <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>LOG IN</h3>
           <div class="form-group">
             <label class="control-label" for="username">USUÁRIO</label>
-            <input class="form-control @error('email') is-invalid @enderror" type="text" placeholder="Email" id="username" name="email" value="{{ old('email') }}" required autofocus>
-            @error('email')
+            <input class="form-control @error('username') is-invalid @enderror" type="text" placeholder="Usuário" id="username" name="username" value="{{ old('username') }}" required autofocus>
+            @error('username')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>

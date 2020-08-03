@@ -16,17 +16,18 @@
     </li>
 
     <li>
+      <a class="app-menu__item {{Request::segment(1)=='sellers'?'active':null}}" href="{{route('sellers.index')}}">
+        <i class="app-menu__icon fa fa-meh-o"></i><span class="app-menu__label">Vendedores</span>
+      </a>
+    </li>
+
+    <li>
       <a class="app-menu__item {{Request::segment(1)=='produtos'?'active':null}}" href="{{route('produtos.index')}}">
         <i class="app-menu__icon fa fa-gift"></i><span class="app-menu__label">Produtos</span>
       </a>
     </li>
 
-    <li>
-      <a class="app-menu__item {{Request::segment(1)=='rents'?'active':null}}" href="{{route('rents.index')}}">
-        <i class="app-menu__icon fa fa-taxi"></i>
-        <span class="app-menu__label">Aluguéis</span>
-      </a>
-    </li>
+    
 
     <li>
       <a class="app-menu__item {{Request::segment(1)=='vendas'?'active':null}}" href="{{route('vendas.index')}}">
@@ -40,17 +41,7 @@
         <i class="treeview-indicator fa fa-angle-right"></i>
       </a>
       <ul class="treeview-menu">
-        <li>
-          <a class="treeview-item {{Request::segment(2)=='rents'?'active':null}}" href="{{route('relatorio.rents')}}">
-            <i class="icon fa fa-circle-o"></i> Alugueis
-          </a>
-        </li>
-        <li>
-          <a class="treeview-item {{Request::segment(2)=='produtoRent'?'active':null}}"
-            href="{{route('relatorio.produtoRent')}}">
-            <i class="icon fa fa-circle-o"></i> Produtos Alugados
-          </a>
-        </li>
+       
         <li>
           <a class="treeview-item {{Request::segment(2)=='vendas'?'active':null}}" href="{{route('relatorio.vendas')}}">
             <i class="icon fa fa-circle-o"></i> Vendas

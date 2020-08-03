@@ -25,10 +25,12 @@ class UserRequest extends FormRequest
     {
         $user=$this->route('user');
         $id=$user?$user->id:null;
+        $ruleEmail= request('email')?"email|unique:users,email,$id":"";
         $dados=[
             'name'=>"required",
-            'email'=>"required|email|unique:users,email,$id",
+            'email'=>$ruleEmail,
             'username'=>"required|unique:users,username,$id",
+            'perfil'=>"required"
             
         ];
         if(!$user):

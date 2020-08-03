@@ -21,6 +21,7 @@
         <th><input class="checkall" type="checkbox"></th>
         <th>Nome de Usuário</th>
         <th>Nome</th>
+        <th>Perfil</th>
         <th>Email</th>
         <th>ID</th>
     </tr>
@@ -33,6 +34,7 @@
         <td></td>
         <td><a href="{{route('users.edit', $user->id)}}">{{$user->username}}</a></td>
         <td>{{$user->name}}</td>
+        <td>{{$user->getPerfilNome()}}</td>
         <td>{{$user->email}}</td>
         <td>{{$user->id}}</td>
     </tr>
@@ -49,7 +51,7 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:4}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:5}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 </script>

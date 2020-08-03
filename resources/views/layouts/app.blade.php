@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Ninacazen - Sistema</title>
+  <title>Dog e Cia - Sistema</title>
 
-  <meta name="description"  content="Sistema Ninacazen - Aluguel de Produtos">
+  <meta name="description"  content="Sistema Dog e Cia - Venda de Produtos">
   
   <!-- Font-icon css-->
   <link rel="stylesheet" type="text/css" href="{{ asset('template/css/font-awesome-4.7.0/css/font-awesome.min.css') }}">

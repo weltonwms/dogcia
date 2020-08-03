@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produto extends Model
 {
-    protected $fillable = ['nome', 'descricao', 'valor_aluguel', 'valor_venda', 'qtd_estoque'];
+    protected $fillable = ['nome', 'descricao', 'ser_vivo', 'grandeza', 'valor_grandeza','margem'];
 
     public function vendas()
     {
@@ -16,24 +16,7 @@ class Produto extends Model
             ->withTimestamps();
     }
 
-    public function rents()
-    {
-        return $this->belongsToMany('App\Rent')
-            ->wherePivot('devolvido', 0)
-            ->using('App\ProdutoRent')
-            ->withPivot('qtd', 'valor_aluguel', 'devolvido')
-            ->withTimestamps();
-    }
-
-    public function countRents()
-    {
-        $produtosAlugados = $this->rents;
-        $count = 0;
-        foreach ($produtosAlugados as $produtoRent):
-            $count += $produtoRent->pivot->qtd;
-        endforeach;
-        return $count;
-    }
+   
 
     public function countVendas()
     {
@@ -45,30 +28,14 @@ class Produto extends Model
         return $count;
     }
 
-    public function updateQtdDisponivel()
-    {
-        $this->qtd_disponivel= $this->qtd_estoque - $this->countRents();
-        $this->save();
-    }
-
-    public function getFormatedValorAluguelAttribute()
-    {
-        return number_format($this->attributes['valor_aluguel'], 2, ',', '.');
-    }
+   
 
     public function getFormatedValorVendaAttribute()
     {
         return number_format($this->attributes['valor_venda'], 2, ',', '.');
     }
 
-    public function setValorAluguelAttribute($price)
-    {
-        if (!is_numeric($price)):
-            $price = str_replace(".", "", $price);
-            $price = str_replace(",", ".", $price);
-        endif;
-        $this->attributes['valor_aluguel'] = $price;
-    }
+   
 
     public function setValorVendaAttribute($price)
     {
@@ -81,13 +48,11 @@ class Produto extends Model
 
     public static function verifyAndDestroy(array $ids)
     {
-        $nrRents= \App\ProdutoRent::whereIn("produto_id",$ids)->count();
+        
         $nrVendas= \App\ProdutoVenda::whereIn("produto_id",$ids)->count();
-        $nrTotal=$nrVendas+$nrRents;
+        $nrTotal=$nrVendas+0;
         $msg=[];
-        if($nrRents > 0):
-            $msg[]="Produto(s) Relacionado(s) a Aluguel";
-        endif;
+       
         if($nrVendas > 0):
             $msg[]="Produto(s) Relacionado(s) a Venda";
         endif;
@@ -102,10 +67,11 @@ class Produto extends Model
     public function verifyAndDelete()
     {
         $nrVendas=$this->vendas->count();
-        $nrRents=\App\ProdutoRent::where('produto_id', $this->id)->count(); //não uso pivot, porcausa do where devolvido==0
-        $nrTotal=$nrVendas+$nrRents;
+        
+        $nrTotal=$nrVendas+0;
+
         if($nrTotal > 0):
-            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => "Produto(s) Relacionado(s) a Venda ou Aluguel"]);
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => "Produto(s) Relacionado(s) a Venda"]);
             return false;
         else:
             return $this->delete();

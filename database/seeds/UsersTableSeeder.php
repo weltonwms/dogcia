@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
             'username'=>'weltonwms',
             'password'=>bcrypt('123456'),
             'remember_token' => Str::random(10),
+            'perfil'=>1
         ]);
     }
 }

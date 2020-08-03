@@ -22,7 +22,7 @@
         <th>Nome</th>
         <th>Email</th>
         <th>Telefone</th>
-        <th>Nascimento</th>
+       
         <th>Endereço</th>
         <th>ID</th>
     </tr>
@@ -35,7 +35,7 @@
         <td><a href="{{route('clientes.edit', $cliente->id)}}">{{$cliente->nome}}</a></td>
         <td>{{$cliente->email}}</td>
         <td>{{$cliente->telefone}}</td>
-        <td>{{$cliente->nascimento}}</td>
+        
         <td>{{$cliente->endereco}}</td>
         <td>{{$cliente->id}}</td>
     </tr>
@@ -52,7 +52,7 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:6}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:5}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 </script>

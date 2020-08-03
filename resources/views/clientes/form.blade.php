@@ -5,14 +5,12 @@
        <!--<input class="form-control"  id="nome" name="nome" type="text">-->
         @endformgroup
 
-        {{ Form::bsText('email',null,['label'=>"Email *"]) }}
+        {{ Form::bsText('email',null,['label'=>"Email "]) }}
 
         @formgroup(['label'=>'Telefone *'])
         <input class="form-control phone"  id="telefone" value="{{ isset($cliente->telefone)?$cliente->telefone:old('telefone') }}" name="telefone" type="tel">
         @endformgroup
-        @formgroup
-        {{ Form::date('nascimento', null, ['class' => 'form-control','id'=>'nascimento']) }}
-        @endformgroup
+       
 
     </div>
 

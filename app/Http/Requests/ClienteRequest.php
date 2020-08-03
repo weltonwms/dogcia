@@ -23,10 +23,16 @@ class ClienteRequest extends FormRequest
      */
     public function rules()
     {
+
+        $cliente=$this->route('cliente');
+        $id=$cliente?$cliente->id:null;
+        $ruleEmail= request('email')?"email|unique:clientes,email,$id":"";
+        $ruleCpf= request('cpf')?"unique:clientes,cpf,$id":"";
          return [
             'nome'=>"required",
-            'email'=>"email",
-            'telefone'=>"required"
+            'telefone'=>"required",
+            'email'=>$ruleEmail,
+            'cpf'=>$ruleCpf
             
         ];
     }

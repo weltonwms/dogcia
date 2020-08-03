@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('username')->unique();
             $table->string('password');
+            $table->tinyInteger('perfil')->unsigned(); //1:dono;2:vendedor
             $table->rememberToken();
             $table->timestamps();
         });

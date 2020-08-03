@@ -9,10 +9,11 @@ $factory->define(Produto::class, function (Faker $faker) {
     $qtd=$faker->numberBetween(20,1000);
     return [
         'nome' => $faker->unique()->state,
-        'valor_aluguel' => $faker->randomNumber(2),
-        'valor_venda' => $faker->randomNumber(2),
-        'qtd_estoque' => $qtd,
-        'qtd_disponivel'=> $qtd
+        'ser_vivo'=>0,
+        'grandeza'=>1,
+        'valor_grandeza'=>12,
+        'margem'=>10,
+        
         
     ];
 });

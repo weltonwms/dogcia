@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','username',
+        'name', 'email', 'password','username', 'perfil'
     ];
 
     /**
@@ -36,4 +36,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getPerfilNome(){
+        $nomes=['',"Dono", "Vendedor"];
+        if($this->pefil < count($nomes)):
+            return $nomes[$this->perfil];
+        endif;
+    }
 }

@@ -3,7 +3,7 @@
 @section('breadcrumb')
   @breadcrumbs(['title'=>'Painel de Controle',
   'icon'=>'fa-dashboard','route'=>route('home'),'subtitle'=>'Página Inicial do
-  Sistema NinaCazen'])
+  Sistema Dog e Cia'])
   @endbreadcrumbs
 @endsection
 
