@@ -46,6 +46,16 @@ class Produto extends Model
         $this->attributes['valor_venda'] = $price;
     }
 
+    public function getNomeCompleto(){
+        $nomes=['','kg','Lt','Un'];
+        return $this->nome." ".$this->valor_grandeza." ".$nomes[$this->grandeza];
+    }
+
+    public function getSerVivoTextoAttribute($price)
+    {
+       return $this->ser_vivo?"Sim":"Nao";
+    }
+
     public static function verifyAndDestroy(array $ids)
     {
         
@@ -77,5 +87,7 @@ class Produto extends Model
             return $this->delete();
         endif;
     }
+
+    
 
 }

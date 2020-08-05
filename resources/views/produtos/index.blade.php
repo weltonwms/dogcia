@@ -20,10 +20,11 @@
     <tr>
         <th><input class="checkall" type="checkbox"></th>
         <th>Nome</th>
-        <th>Valor Aluguel</th>
-        <th>Valor Venda</th>
+        <th>Ser Vivo</th>
         <th>Qtd Estoque</th>
-        <th>Qtd Disponível</th>
+        <th>Custo Médio Un</th>
+        <th>Valor Venda</th>
+        <th>Granel</th>
         <th>Descrição</th>
         <th>ID</th>
     </tr>
@@ -34,11 +35,13 @@
     <tr>
        
         <td></td>
-        <td><a href="{{route('produtos.edit', $produto->id)}}">{{$produto->nome}}</a></td>
-        <td>{{$produto->formated_valor_aluguel}}</td>
-        <td>{{$produto->formated_valor_venda}}</td>
+        <td><a href="{{route('produtos.edit', $produto->id)}}">{{$produto->getNomeCompleto()}}</a></td>
+        <td>{{$produto->ser_vivo_texto}}</td>
+        
         <td>{{$produto->qtd_estoque}}</td>
-        <td>{{$produto->qtd_disponivel}}</td>
+        <td>{{$produto->custo_medio}}</td>
+        <td>{{$produto->formated_valor_venda}}</td>
+        <td>{{$produto->granel}}</td>
         <td>{{$produto->descricao}}</td>
         <td>{{$produto->id}}</td>
     </tr>

@@ -1,26 +1,45 @@
-{{-- Usando o componentede Form bsText: forma mais curta que component blade FormGroup --}}
+<?php
+$grandezas=[''=>"-Selecione-",1=>"Kilo",2=>"Litro",3=>"Unitário"];
+$seres=[0=>"Não",1=>"Sim"];
+?>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         {{ Form::bsText('nome',null,['label'=>"Nome *"]) }}
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-6">
+        {{ Form::bsSelect('ser_vivo',$seres,null,['label'=>"Ser Vivo *"]) }}
+
+    </div>
+
+
+    <div class="col-md-6">
+        {{ Form::bsSelect('grandeza',$grandezas,null,['label'=>"Grandeza *"]) }}
+
+    </div>
+
+    <div class="col-md-6">
+        {{ Form::bsNumber('valor_grandeza',null,['label'=>"Valor Grandeza *",'min'=>'1']) }}
+    </div>
+
+    <div class="col-md-6">
         {{ Form::bsText('descricao',null,['label'=>"Descrição"]) }}
     </div>
 
-    <div class="col-md-4">
-        {{ Form::bsNumber('qtd_estoque',null,['label'=>"Qtd Estoque *",'min'=>'0']) }}
+    <div class="col-md-6">
+        {{ Form::bsNumber('margem',null,['label'=>"Margem %"]) }}
     </div>
 
-    <div class="col-md-4">
-        {{ Form::bsText('valor_aluguel',null,['label'=>"Valor Aluguel *", 'class'=>"money"]) }}
+    <div class="toggle lg">
+        <label>
+            Ser Vivo 
+            <input type="checkbox"><span class="button-indecator"></span>
+        </label>
     </div>
 
-    <div class="col-md-4">
-        {{ Form::bsText('valor_venda',null,['label'=>"Valor Venda *", 'class'=>"money"]) }}
-    </div>
 
-   
+
+
 
 
 </div>

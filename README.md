@@ -2,7 +2,7 @@
 
 ## sobre DOG E CIA
 
-Projeto de vendas de produtos de agropecuária, contruído utilizando o framework LARAVEL. Possui as seguintes funcionalidades:
+Projeto de vendas de produtos de agropecuária, construído utilizando o framework LARAVEL. Possui as seguintes funcionalidades:
 
 - Controle de Clientes.
 - Controle de Produtos.

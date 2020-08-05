@@ -17,7 +17,7 @@ class CreateComprasTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('produto_id');
             $table->date('data_compra');
-            $table->date('vencimento');
+            $table->date('vencimento')->nullable();
             $table->integer('qtd');
             $table->decimal('valor_compra', 10, 2);
             $table->timestamps();
