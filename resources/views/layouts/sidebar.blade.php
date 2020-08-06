@@ -28,6 +28,12 @@
     </li>
 
     <li>
+      <a class="app-menu__item {{Request::segment(1)=='mortes'?'active':null}}" href="{{route('mortes.index')}}">
+        <i class="app-menu__icon fa fa-bed"></i><span class="app-menu__label">Mortes</span>
+      </a>
+    </li>
+
+    <li>
       <a class="app-menu__item {{Request::segment(1)=='compras'?'active':null}}" href="{{route('compras.index')}}">
         <i class="app-menu__icon fa fa-gift"></i><span class="app-menu__label">Compras</span>
       </a>

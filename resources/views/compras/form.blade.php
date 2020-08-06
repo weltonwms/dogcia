@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-2 col-sm-6 ">
         <?php
-            $dtCompra= isset($rent)  ? null : \Carbon\Carbon::now()->format('Y-m-d');
+            $dtCompra= isset($compra)  ? null : \Carbon\Carbon::now()->format('Y-m-d');
         ?>
         {{ Form::bsDate('data_compra', $dtCompra,['label'=>"Data Compra"]) }}
     </div>

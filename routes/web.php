@@ -32,7 +32,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::resource('compras', 'CompraController');
     Route::delete('/compras_bath','CompraController@destroyBath' )->name('compras_bath.destroy');
     
-    
+    Route::resource('mortes', 'MorteController');
+    Route::delete('/mortes_bath','MorteController@destroyBath' )->name('mortes_bath.destroy');
+
     Route::resource('vendas', 'VendaController');
     Route::delete('/vendas_bath','VendaController@destroyBath' )->name('vendas_bath.destroy');
     Route::get('vendas/{venda}/print ','VendaController@print')->name('vendas.print');
