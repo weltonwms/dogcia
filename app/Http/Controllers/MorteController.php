@@ -26,7 +26,7 @@ class MorteController extends Controller
     public function create()
     {
         $dados = [
-            'produtos' => \App\Produto::pluck('nome', 'id'),
+            'produtos' => \App\Produto::getListVivos(),
             
             
         ];
@@ -69,7 +69,7 @@ class MorteController extends Controller
     public function edit(Morte $morte)
     {
         $dados = [
-            'produtos' => \App\Produto::pluck('nome', 'id'),
+            'produtos' => \App\Produto::getListVivos(),
             'morte' => $morte,
         ];
         return view('mortes.edit', $dados);

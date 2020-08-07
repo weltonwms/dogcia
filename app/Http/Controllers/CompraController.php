@@ -26,7 +26,7 @@ class CompraController extends Controller
     public function create()
     {
         $dados = [
-            'produtos' => \App\Produto::pluck('nome', 'id'),
+            'produtos' => \App\Produto::getList(),
             
             
         ];
@@ -69,7 +69,7 @@ class CompraController extends Controller
     public function edit(Compra $compra)
     {
         $dados = [
-            'produtos' => \App\Produto::pluck('nome', 'id'),
+            'produtos' => \App\Produto::getList(),
             'compra' => $compra,
         ];
         return view('compras.edit', $dados);

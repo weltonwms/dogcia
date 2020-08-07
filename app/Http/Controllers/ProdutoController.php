@@ -37,6 +37,7 @@ class ProdutoController extends Controller
      */
     public function store(ProdutoRequest $request)
     {
+        // dd($request->all());
         $produto=Produto::create($request->all());
         // $produto->qtd_disponivel=$produto->qtd_estoque;
         // $produto->save();

@@ -24,11 +24,11 @@ class ProdutoRequest extends FormRequest
     public function rules()
     {
         $produto=$this->route('produto');
-              
+        $rule1= (request('grandeza')==1 || request('grandeza')==2)?"required" :"" ;  
         return [
             'nome'=>"required",
             'grandeza'=>"required",
-            'valor_grandeza'=>"required",
+            'valor_grandeza'=>$rule1,
             'margem'=>"required"
         ];
     }

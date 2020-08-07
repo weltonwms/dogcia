@@ -71,3 +71,21 @@
 .destaque1{
   background-color: #caf5df;
 }
+
+.btn-group.groupyesno .btn{
+     padding: 0.095rem 1.75rem;
+}
+
+label.control-label.yesno{
+  display: block;
+}
+
+.btn-group.groupyesno .btn.yes.active{
+  background-color: #2196F3;
+  border-color: #2196F3;
+}
+
+.btn-group.groupyesno .btn.no.active{
+  background-color: #dc3545;
+  border-color:#dc3545
+}

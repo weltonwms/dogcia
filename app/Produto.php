@@ -47,8 +47,12 @@ class Produto extends Model
     }
 
     public function getNomeCompleto(){
-        $nomes=['','kg','Lt','Un'];
-        return $this->nome." ".$this->valor_grandeza." ".$nomes[$this->grandeza];
+        $nome=$this->nome;
+            if($this->grandeza==1 || $this->grandeza==2):
+                $grandezas=['','Kg','Lt'];
+                $nome.= " ".$this->valor_grandeza." ".$grandezas[$this->grandeza];
+            endif;
+        return $nome;
     }
 
     public function getSerVivoTextoAttribute($price)
@@ -86,6 +90,21 @@ class Produto extends Model
         else:
             return $this->delete();
         endif;
+    }
+
+    public static function getList()
+    {
+        return self::all()->mapWithKeys(function($produto){
+                  
+            return [$produto->id => $produto->getNomeCompleto()];
+        });
+    }
+
+    public static function getListVivos()
+    {
+        return self::where('ser_vivo',1)->get()->mapWithKeys(function($produto){
+             return [$produto->id => $produto->getNomeCompleto()];
+        });
     }
 
     

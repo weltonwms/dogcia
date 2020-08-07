@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         \Form::component('bsDate', 'components.form.date', ['name', 'value' => null, 'attributes' => []]);
         \Form::component('bsPassword', 'components.form.password', ['name',  'attributes' => []]);
         \Form::component('bsSelect', 'components.form.select', ['name', 'list'=>[],'value'=>null, 'attributes' => []]);
+        \Form::component('bsYesno', 'components.form.yesno',['name','default'=>null] );
        
         ProdutoVenda::observe(ProdutoVendaObserver::class);
     }

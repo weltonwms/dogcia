@@ -88,6 +88,12 @@ class Compra extends Model
         endif;
         $this->attributes['valor_compra'] = $price;
     }
+
+    public function getTotal(){
+        return $this->qtd*$this->valor_compra;
+    }
+
+    
     
 
 

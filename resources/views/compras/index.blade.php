@@ -39,6 +39,7 @@ Compras'])
         <th>Data Vencimento</th>
         <th>Qtd</th>
         <th>Valor Un</th>
+        <th>Total</th>
         <th>ID</th>
     </tr>
 </thead>
@@ -57,6 +58,7 @@ Compras'])
         <td>{{$compra->vencimento}}</td>
         <td>{{$compra->qtd}}</td>
         <td>{{$compra->valor_compra}}</td>
+        <td>{{$compra->getTotal()}}</td>
         <td>{{$compra->id}}</td>
     </tr>
     @endforeach
