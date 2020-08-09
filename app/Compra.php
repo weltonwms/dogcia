@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Compra extends Model
 {
     use FormAccessible;
@@ -92,6 +93,8 @@ class Compra extends Model
     public function getTotal(){
         return $this->qtd*$this->valor_compra;
     }
+
+    
 
     
     

@@ -38,7 +38,7 @@ Mortes'])
         <th>Valor Un</th>
         <th>Qtd</th>
         <th>Prejuízo</th>
-         <th>ID</th>
+        <th id>ID</th>
     </tr>
 </thead>
 

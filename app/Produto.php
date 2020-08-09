@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Compra;
 
 class Produto extends Model
 {
@@ -105,6 +106,32 @@ class Produto extends Model
         return self::where('ser_vivo',1)->get()->mapWithKeys(function($produto){
              return [$produto->id => $produto->getNomeCompleto()];
         });
+    }
+
+    /**
+     * Método baseado em formula de Custo Médio. Recebe uma Compra atual.
+     * A formula basea-se no que está sendo adquirido e no que já tinha
+     */
+    public function setCustoMedioOnAddCompra(Compra $compra)
+    {
+        $numerador= $compra->getTotal() + ($this->custo_medio * $this->qtd_estoque);
+        $denoninador= $compra->qtd + $this->qtd_estoque;
+        $custo_medio= $numerador/$denoninador;
+        $this->custo_medio=$custo_medio;
+
+    }
+
+    /**
+     * Método baseado em formula de Custo Médio. Recebe uma Compra a ser Desfeita.
+     * Desfaz a Compra no custo médio
+     */
+    public function setCustoMedioOnRemoveCompra(Compra $compra)
+    {
+        $numerador= -$compra->getTotal() + ($this->custo_medio * $this->qtd_estoque);
+        $denoninador= -$compra->qtd + $this->qtd_estoque;
+        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
+        $this->custo_medio=$custo_medio;
+
     }
 
     

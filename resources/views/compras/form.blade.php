@@ -1,13 +1,13 @@
 <div class="form-row">
     <div class="col-md-4">
-        {{ Form::bsSelect('produto_id',$produtos,null,['label'=>"Produto", 'placeholder' => '--Selecione--','class'=>'select2']) }}
+        {{ Form::bsSelect('produto_id',$produtos,null,['label'=>"Produto *", 'placeholder' => '--Selecione--','class'=>'select2']) }}
 
     </div>
     <div class="col-md-4 ">
         <?php
             $dtCompra= isset($compra)  ? null : \Carbon\Carbon::now()->format('Y-m-d');
         ?>
-        {{ Form::bsDate('data_compra', $dtCompra,['label'=>"Data Compra"]) }}
+        {{ Form::bsDate('data_compra', $dtCompra,['label'=>"Data Compra *"]) }}
     </div>
     <div class="col-md-4">
         {{ Form::bsDate('vencimento',null,['label'=>"Data Vencimento"]) }}

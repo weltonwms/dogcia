@@ -58,7 +58,7 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:7}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:8}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Compra;
 use Illuminate\Http\Request;
+use App\Http\Requests\CompraRequest;
 
 class CompraController extends Controller
 {
@@ -27,8 +28,6 @@ class CompraController extends Controller
     {
         $dados = [
             'produtos' => \App\Produto::getList(),
-            
-            
         ];
         return view('compras.create', $dados);
     }
@@ -39,7 +38,7 @@ class CompraController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CompraRequest $request)
     {
         $compra = Compra::create($request->all());
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);

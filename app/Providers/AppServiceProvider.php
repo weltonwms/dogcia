@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade; //add para facilitar componente blade
 
+use App\Observers\CompraObserver; //usado para eventos em Compra
+use App\Compra;
 
 
 use App\Observers\ProdutoVendaObserver; //usado para eventos em ProdutoVenda
@@ -43,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         \Form::component('bsYesno', 'components.form.yesno',['name','default'=>null] );
        
         ProdutoVenda::observe(ProdutoVendaObserver::class);
+        Compra::observe(CompraObserver::class);
     }
 }
