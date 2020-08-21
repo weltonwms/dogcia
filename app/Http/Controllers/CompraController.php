@@ -83,8 +83,17 @@ class CompraController extends Controller
      */
     public function update(Request $request, Compra $compra)
     {
-        $compra->update($request->all());
-        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+        try{
+            \DB::transaction(function () use ($compra,$request){
+                $compra->update($request->all());
+                \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+
+            });
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
+        }
+        
         if ($request->input('fechar') == 1):
             return redirect()->route('compras.index');
         endif;
@@ -99,21 +108,33 @@ class CompraController extends Controller
      */
     public function destroy(Compra $compra)
     {
-        $retorno = $compra->delete();
-        if ($retorno):
-            \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionDelete')]);
-        endif;
- 
-        return redirect()->route('compras.index');
+        try{
+            \DB::transaction(function () use ($compra){
+                $compra->delete();
+                \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionDelete')]);
+            });
+
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
+        }
+         return redirect()->route('compras.index');
+
      }
  
      public function destroyBath()
      {
-      $retorno= Compra::destroy(request('ids'));
-      if ($retorno):
-             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans_choice('messages.actionDelete', $retorno)]);
-         endif;
- 
-         return redirect()->route('compras.index');
+        try{
+            \DB::transaction(function () {
+                $retorno=Compra::destroy(request('ids'));
+                \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans_choice('messages.actionDelete', $retorno)]);
+
+            });
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
+        }
+        return redirect()->route('compras.index');
+        
      }
 }

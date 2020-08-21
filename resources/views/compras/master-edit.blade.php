@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrumb')
-@breadcrumbs(['title'=>'Compras', 'icon'=>'fa-gift','route'=>route('compras.index'),'subtitle'=>'Gerenciamento de Compras'])
+@breadcrumbs(['title'=>'Compras', 'icon'=>'fa-shopping-basket','route'=>route('compras.index'),'subtitle'=>'Gerenciamento de Compras'])
 
 @endbreadcrumbs
 @endsection
@@ -29,7 +29,6 @@
 </div>
 
 
-
-
+@include('compras.modal.produto')
 
 @endsection

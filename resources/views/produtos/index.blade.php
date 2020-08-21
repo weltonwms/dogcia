@@ -40,7 +40,7 @@
         
         <td>{{$produto->qtd_estoque}}</td>
         <td>{{$produto->custo_medio}}</td>
-        <td>{{$produto->formated_valor_venda}}</td>
+        <td>{{$produto->getValorVenda()}}</td>
         <td>{{$produto->granel}}</td>
         <td>{{$produto->descricao}}</td>
         <td>{{$produto->id}}</td>

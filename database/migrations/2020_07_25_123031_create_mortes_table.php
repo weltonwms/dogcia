@@ -16,8 +16,9 @@ class CreateMortesTable extends Migration
         Schema::create('mortes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('produto_id');
+            $table->date('data_morte');
             $table->integer('qtd');
-            $table->decimal('valor', 10, 2);
+            $table->decimal('custo_medio', 10, 3); //histórico momento custo
             $table->timestamps();
 
             $table->foreign('produto_id')->references('id')->on('produtos');

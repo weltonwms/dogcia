@@ -7,6 +7,11 @@ $in = $doc->getElementsByTagName('input')[0];
 $id = '';
 $name = '';
 
+//se não for input, tentar com select
+if(!$in):
+    $in = $doc->getElementsByTagName('select')[0];
+endif;
+
 if ($in):
     $id = $in->getAttribute('id');
     $name = $in->getAttribute('name');

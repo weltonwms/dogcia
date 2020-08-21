@@ -26,8 +26,7 @@ class CompraObserver
     public function updating(Compra $compra)
     {
         self::$compraBeforeSave =Compra::find($compra->id);
-        $this->desfazerCompra(self::$compraBeforeSave);
-        \Log::info('updating -  Id: '.$compra->id." qtd antes salvar: ".self::$compraBeforeSave->qtd);
+       
     }
 
     /**
@@ -38,8 +37,14 @@ class CompraObserver
      */
     public function updated(Compra $compra)
     {
-        $this->addCompra($compra);
-        \Log::info('updated -  Id: '.$compra->id." qtd após salvar: ".$compra->qtd);
+        if($compra->produto->id!=self::$compraBeforeSave->produto->id):
+            $this->desfazerCompra(self::$compraBeforeSave);
+            $this->addCompra($compra);
+        else:
+            $this->updateCompra(self::$compraBeforeSave,$compra);
+        endif;
+            
+       
     }
 
     /**
@@ -50,6 +55,7 @@ class CompraObserver
      */
     public function deleted(Compra $compra)
     {
+        
         $this->desfazerCompra($compra);
         \Log::info('deteted -  Id: '.$compra->id);
     }
@@ -67,6 +73,14 @@ class CompraObserver
         $produto= $compra->produto; //produto da compra
         $produto->setCustoMedioOnAddCompra($compra); //novo custo médio
         $produto->qtd_estoque+=$compra->qtd; //novo estoque
+        $produto->save();
+    }
+
+    private function updateCompra(Compra $compraBefore, Compra $compra)
+    {
+        $produto= $compra->produto; //produto da compra
+        $produto->setCustoMedioOnUpdateCompra($compraBefore, $compra);
+        $produto->qtd_estoque+= ($compra->qtd-$compraBefore->qtd);//add diferença do atual pelo anterior
         $produto->save();
     }
 }

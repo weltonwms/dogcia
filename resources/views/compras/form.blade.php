@@ -1,8 +1,25 @@
 <div class="form-row">
     <div class="col-md-4">
-        {{ Form::bsSelect('produto_id',$produtos,null,['label'=>"Produto *", 'placeholder' => '--Selecione--','class'=>'select2']) }}
+        
+                @formgroup(['label'=>"Produto *"])
+                <div class="input-group ">
+                    {{ Form::select('produto_id',$produtos,null,['id'=>"produto_id", 'placeholder' => '--Selecione--','class'=>'select2 form-control','style'=>"width:88%"]) }}
 
+                   
+                    <div class="input-group-append">
+                       
+                      <button class="btn btn-outline-primary btn-sm addProduto" 
+                        data-toggle="modal"
+                        data-target="#ModalFormProduto"
+                        type="button" title="Criar Produto Caso não Exista">
+                         <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                  </div>
+                @endformgroup
+    
     </div>
+
     <div class="col-md-4 ">
         <?php
             $dtCompra= isset($compra)  ? null : \Carbon\Carbon::now()->format('Y-m-d');
@@ -29,6 +46,13 @@
     </div>
 
 </div>
+
+
+
+
+
+
+
 
 @push('scripts')
     <script>
@@ -67,7 +91,13 @@
 
         $("input[name=qtd], input[name=valor_compra]").change(setTotal);
         $("#total").change(setValor);
+
+     
+
     </script>
+
+
+
 @endpush
 
 

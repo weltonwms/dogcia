@@ -35,7 +35,7 @@ Mortes'])
     <tr>
         <th><input class="checkall" type="checkbox"></th>
         <th>Produto</th>
-        <th>Valor Un</th>
+        <th>Data Morte</th>
         <th>Qtd</th>
         <th>Prejuízo</th>
         <th id>ID</th>
@@ -53,9 +53,9 @@ Mortes'])
         </a>
         </td>
         
-        <td>{{$morte->valor}}</td>
+        <td>{{$morte->data_morte}}</td>
         <td>{{$morte->qtd}}</td>
-        <td>{{$morte->getTotal()}}</td>
+        <td>{{$morte->custo_medio*$morte->qtd}}</td>
         <td>{{$morte->id}}</td>
     </tr>
     @endforeach

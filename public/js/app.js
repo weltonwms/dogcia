@@ -90,7 +90,9 @@ $(document).ready(function () {
     $('.select2').select2();
     $('#formProduto_produto_id').select2({
          dropdownParent: $('#ModalFormProduto'),
-         width: 'style' 
+         theme: "bootstrap",
+          width: 'style' 
+        //width:auto
      });
 
 });

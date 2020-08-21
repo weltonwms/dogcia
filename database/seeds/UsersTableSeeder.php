@@ -20,5 +20,14 @@ class UsersTableSeeder extends Seeder
             'remember_token' => Str::random(10),
             'perfil'=>1
         ]);
+
+        \App\User::create([
+            'name'=>"Lucas Marçal",
+            'email'=>"lucas@gmail.com",
+            'username'=>'lucas',
+            'password'=>bcrypt('123456'),
+            'remember_token' => Str::random(10),
+            'perfil'=>1
+        ]);
     }
 }

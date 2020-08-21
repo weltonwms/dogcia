@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Morte;
 use Illuminate\Http\Request;
+use App\Http\Requests\MorteRequest;
 
 class MorteController extends Controller
 {
@@ -26,7 +27,8 @@ class MorteController extends Controller
     public function create()
     {
         $dados = [
-            'produtos' => \App\Produto::getListVivos(),
+            'produtos'=> \App\Produto::where('ser_vivo',1)->get(),
+            'produtosList' => \App\Produto::getListVivos(),
             
             
         ];
@@ -39,9 +41,9 @@ class MorteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MorteRequest $request)
     {
-        $morte = Morte::create($this->getDadosTratados($request->all()));
+        $morte = Morte::create($request->all());
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('mortes.index');
@@ -69,7 +71,8 @@ class MorteController extends Controller
     public function edit(Morte $morte)
     {
         $dados = [
-            'produtos' => \App\Produto::getListVivos(),
+            'produtos'=> \App\Produto::where('ser_vivo',1)->get(),
+            'produtosList' => \App\Produto::getListVivos(),
             'morte' => $morte,
         ];
         return view('mortes.edit', $dados);
@@ -82,9 +85,9 @@ class MorteController extends Controller
      * @param  \App\Morte  $morte
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Morte $morte)
+    public function update(MorteRequest $request, Morte $morte)
     {
-        $morte->update($this->getDadosTratados( $request->all() ));
+        $morte->update($request->all());
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('mortes.index');
@@ -118,12 +121,12 @@ class MorteController extends Controller
          return redirect()->route('mortes.index');
      }
 
-     private function getDadosTratados($request)
-     {
-         $produto= \App\Produto::find($request['produto_id']);
-         $dados= $request;
-         $dados['valor']=$produto->custo_medio;
+    //  private function getDadosTratados($request)
+    //  {
+    //      $produto= \App\Produto::find($request['produto_id']);
+    //      $dados= $request;
+    //      $dados['valor']=$produto->custo_medio;
         
-         return $dados;
-     }
+    //      return $dados;
+    //  }
 }

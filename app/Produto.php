@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Compra;
+use App\Morte;
 
 class Produto extends Model
 {
@@ -93,6 +94,11 @@ class Produto extends Model
         endif;
     }
 
+    public function getValorVenda(){
+        
+        return $this->custo_medio*($this->margem/100 +1);
+    }
+
     public static function getList()
     {
         return self::all()->mapWithKeys(function($produto){
@@ -116,7 +122,7 @@ class Produto extends Model
     {
         $numerador= $compra->getTotal() + ($this->custo_medio * $this->qtd_estoque);
         $denoninador= $compra->qtd + $this->qtd_estoque;
-        $custo_medio= $numerador/$denoninador;
+        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
         $this->custo_medio=$custo_medio;
 
     }
@@ -133,6 +139,39 @@ class Produto extends Model
         $this->custo_medio=$custo_medio;
 
     }
+
+    public function setCustoMedioOnUpdateCompra(Compra $compraBefore,Compra $compra)
+    {
+        $totalCompraDiferenca=$compra->getTotal() - $compraBefore->getTotal();
+        $qtdCompraDiferenca= $compra->qtd - $compraBefore->qtd;
+        $numerador= $totalCompraDiferenca + ($this->custo_medio * $this->qtd_estoque);
+        $denoninador= $qtdCompraDiferenca + $this->qtd_estoque;
+        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
+        $this->custo_medio=$custo_medio;
+
+    }
+
+
+    public function setCustoMedioOnDesfazerMorte($morte)
+    {
+        $numerador= $morte->getTotal() + ($this->custo_medio * $this->qtd_estoque);
+        $denoninador= $morte->qtd + $this->qtd_estoque;
+        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
+        $this->custo_medio=$custo_medio;
+
+    }
+
+    public function save(array $options = array())
+    {
+        if($this->qtd_estoque < 0):
+            throw new \Exception('Estoque inválido.');
+        endif;
+       
+        parent::save($options);
+      
+     
+    }
+  
 
     
 

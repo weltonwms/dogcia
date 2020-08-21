@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Blade; //add para facilitar componente blade
 use App\Observers\CompraObserver; //usado para eventos em Compra
 use App\Compra;
 
+use App\Observers\MorteObserver; //usado para eventos em Compra
+use App\Morte;
+
 
 use App\Observers\ProdutoVendaObserver; //usado para eventos em ProdutoVenda
 use App\ProdutoVenda;
@@ -46,5 +49,6 @@ class AppServiceProvider extends ServiceProvider
        
         ProdutoVenda::observe(ProdutoVendaObserver::class);
         Compra::observe(CompraObserver::class);
+        Morte::observe(MorteObserver::class);
     }
 }

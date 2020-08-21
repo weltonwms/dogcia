@@ -37,10 +37,12 @@ class ProdutoController extends Controller
      */
     public function store(ProdutoRequest $request)
     {
-        // dd($request->all());
         $produto=Produto::create($request->all());
-        // $produto->qtd_disponivel=$produto->qtd_estoque;
-        // $produto->save();
+        if($request->ajax()){
+            $produto->nome_completo=$produto->getNomeCompleto();
+            return response()->json($produto);
+        }
+        
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect('produtos');
@@ -80,7 +82,7 @@ class ProdutoController extends Controller
     public function update(ProdutoRequest $request, Produto $produto)
     {
         $produto->update($request->all());
-        //$produto->updateQtdDisponivel();
+        
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('produtos.index');
