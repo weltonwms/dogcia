@@ -30,6 +30,20 @@ class Produto extends Model
         return $count;
     }
 
+    public static function getAllByFiltros(){
+        $query = self::query();
+        $request = request();
+        if (is_numeric($request->vivo)):
+            $query->where('ser_vivo', $request->vivo);
+        endif;
+        if (is_numeric($request->estoque)):
+            $op= $request->estoque==0?"=":">";
+            $query->where('qtd_estoque', $op, 0);
+        endif;
+        return $query->get();
+        
+    }
+
    
 
     public function getFormatedValorVendaAttribute()

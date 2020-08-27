@@ -15,6 +15,25 @@
 @endsection
 
 @section('content')
+
+<div class="tile tile-nomargin">
+ <form action="{{route('produtos.index')}}"> 
+    <label class="text-primary">Ser Vivo</label>
+    {!!Form::select('vivo', [""=>"Todos",'1' => 'Sim', '0' => 'Não'],
+        request('vivo'),
+        ['onchange'=>"this.form.submit()"]
+     )!!}
+&nbsp;&nbsp;
+<label class="text-primary">Estoque</label>
+{!!Form::select('estoque', [''=>"Todos",'1'=>">0",'0' => '=0'], 
+    request('estoque'),
+    ['onchange'=>"this.form.submit()"]
+)!!}
+
+</form> 
+</div>
+
+
 @datatables
 <thead>
     <tr>
@@ -23,6 +42,7 @@
         <th>Ser Vivo</th>
         <th>Qtd Estoque</th>
         <th>Custo Médio Un</th>
+        <th>Margem %</th>
         <th>Valor Venda</th>
         <th>Granel</th>
         <th>Descrição</th>
@@ -39,8 +59,9 @@
         <td>{{$produto->ser_vivo_texto}}</td>
         
         <td>{{$produto->qtd_estoque}}</td>
-        <td>{{$produto->custo_medio}}</td>
-        <td>{{$produto->getValorVenda()}}</td>
+        <td>{{Util::moneyToBr($produto->custo_medio,true)}}</td>
+        <td>{{$produto->margem}}</td>
+        <td>{{Util::moneyToBr($produto->getValorVenda(),true)}}</td>
         <td>{{$produto->granel}}</td>
         <td>{{$produto->descricao}}</td>
         <td>{{$produto->id}}</td>
@@ -58,8 +79,11 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:8}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:9}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
+
+
+
 </script>
 @endpush

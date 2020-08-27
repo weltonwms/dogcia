@@ -15,7 +15,7 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        $produtos = Produto::all();
+        $produtos = Produto::getAllByFiltros();
         return view("produtos.index", compact('produtos'));
     }
 

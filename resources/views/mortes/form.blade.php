@@ -11,7 +11,7 @@
         {{ Form::bsSelect('produto_id',$produtosList,null,['label'=>"Produto", 'placeholder' => '--Selecione--','class'=>'select2']) }}
 
     </div>
-    
+
     <div class="col-md-4">
         {{ Form::bsNumber('qtd',null,['label'=>"Qtd *",'min'=>'0']) }}
     </div>
@@ -25,21 +25,19 @@
             <label for="total" class="control-label">Total</label>
             <input type="text" id="total" class="form-control money" readonly>
         </div>
-       
+
     </div>
-    
-    
+
+
 </div>
 
 
 @push('scripts')
-    <script>
-        var TelaMorte= (function(){
+<script>
+    var TelaMorte= (function(){
             var produtos=JSON.parse( $("#produtos_json").val() || '[]' );
             var currentProduto;
-            var custo_medio_gravado;
-            var qtd_gravada;
-            var produto_id_gravado;
+           
 
             function setCurrentProduto(id){
                 currentProduto=getProduto(id);
@@ -57,11 +55,13 @@
             }
 
             function initOnEdit(){
-                custo_medio_gravado= $("#custo_medio").val() || null;
-                qtd_gravada= $("#qtd").val() || null;
-                produto_id_gravado= $("#produto_id").val() || null;
+                var custo_medio_gravado= ler_valor("#custo_medio");
+                var qtd_gravada= ler_valor("#qtd");
+                var produto_id_gravado= ler_valor("#produto_id");
+                
                if(produto_id_gravado){
                     setCurrentProduto(produto_id_gravado);
+                    currentProduto.custo_medio=moneyBrToFloat(custo_medio_gravado)
                     console.log(currentProduto);
                     writeTotal();
                }
@@ -81,44 +81,42 @@
 
             function writeCusto(){
                 var custo_medio= getCustoMedio();
-                $("#custo_medio").val(formatNumber(custo_medio));
+                $("#custo_medio").val(valorFormatado(custo_medio));
             }
 
             function writeTotal(){
-                var qtd= $("#qtd").val();
-                var custo_medio= getCustoMedio();
+                var qtd= ler_valor("#qtd");
+                var custo_medio= ler_valor("#custo_medio");
                 var total="";
                 if(qtd && custo_medio){
                     total=qtd*custo_medio;
                 }
-                $("#total").val(formatNumber(total));
+                $("#total").val(valorFormatado(total));
             }
 
             function getCustoMedio(){
-                var custo_medio= currentProduto?currentProduto.custo_medio:"";
-                var qtd= $("#qtd").val();
-                if(produto_id_gravado && produto_id_gravado==currentProduto.id ){
-                    var totalCustoAnterior=(qtd_gravada*custo_medio_gravado)
-                    var totalCustoAdd= custo_medio*(qtd-qtd_gravada)
-                    if(qtd>qtd_gravada){
-                        custo_medio=(totalCustoAnterior+totalCustoAdd)/qtd;
-                    }
-                    else{
-                        custo_medio= custo_medio_gravado;
-                    }
+                console.log(currentProduto)
+                if(currentProduto){
+                    return currentProduto.custo_medio;
+                }
+                // var custo_medio= currentProduto?currentProduto.custo_medio:"";
+                // var qtd= $("#qtd").val();
+                // if(produto_id_gravado && produto_id_gravado==currentProduto.id ){
+                //     var totalCustoAnterior=(qtd_gravada*custo_medio_gravado)
+                //     var totalCustoAdd= custo_medio*(qtd-qtd_gravada)
+                //     if(qtd>qtd_gravada){
+                //         custo_medio=(totalCustoAnterior+totalCustoAdd)/qtd;
+                //     }
+                //     else{
+                //         custo_medio= custo_medio_gravado;
+                //     }
                    
-                }
+                // }
 
-                return custo_medio;
+                // return custo_medio;
             }
 
-            function formatNumber(n){
-                var nr= parseFloat(n);
-                if(!isNaN(nr)){
-                    return nr.toFixed(2).toString().replace('.', ',');
-                }
-                return "";
-            }
+            
 
             return{
                 changeProduto:changeProduto,
@@ -135,9 +133,5 @@
         $("#produto_id").change(TelaMorte.changeProduto);
         $("#qtd").change(TelaMorte.changeQtd);
         TelaMorte.initOnEdit();
-    </script>
+</script>
 @endpush
-
-
-
-

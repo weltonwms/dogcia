@@ -30,6 +30,7 @@ class VendaController extends Controller
         $dados = [
             'produtos' => \App\Produto::all(),
             'clientes' => \App\Cliente::pluck('nome', 'id'),
+            'sellers' => \App\Seller::pluck('nome', 'id'),
         ];
         return view('vendas.create', $dados);
     }

@@ -57,8 +57,8 @@ Compras'])
         <td>{{$compra->data_compra}}</td>
         <td>{{$compra->vencimento}}</td>
         <td>{{$compra->qtd}}</td>
-        <td>{{$compra->valor_compra}}</td>
-        <td>{{$compra->getTotal()}}</td>
+        <td>{{Util::moneyToBr($compra->valor_compra,true)}}</td>
+        <td>{{Util::moneyToBr($compra->getTotal(),true)}}</td>
         <td>{{$compra->id}}</td>
     </tr>
     @endforeach

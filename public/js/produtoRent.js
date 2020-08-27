@@ -272,16 +272,17 @@ function calculoTotal() {
     }
 }
 
-function valorFormatado(valorNumber){
-    var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
-    var valor_formatado = v.toFixed(2).toString().replace('.', ',');
-    return valor_formatado; //string formatada
-}
+//jogar para funções globais
+// function valorFormatado(valorNumber){
+//     var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
+//     var valor_formatado = v.toFixed(2).toString().replace('.', ',');
+//     return valor_formatado; //string formatada
+// }
 
-function ler_valor(campo) {
-    var valor = $(campo).val().replace('.', '').replace(',', '.');
-    return parseFloat(valor);
-}
+// function ler_valor(campo) {
+//     var valor = $(campo).val().replace('.', '').replace(',', '.');
+//     return parseFloat(valor);
+// }
 
 function checkErrors(){
     var qtd= TelaProduto.getQtd();

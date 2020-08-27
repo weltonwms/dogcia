@@ -6,6 +6,8 @@ use App\Morte;
 
 class MorteObserver
 {
+    private static $morteBeforeSave;
+
     /**
      * Handle the morte "created" event.
      *
@@ -14,15 +16,15 @@ class MorteObserver
      */
     public function created(Morte $morte)
     {
-        \Log::info(\json_encode($morte));
-        $this->addMorte($morte);
+       $this->addMorte($morte);
+       \Log::info(\json_encode($morte));
         
     }
 
     public function updating(Morte $morte)
     {
-        $morteBeforeSave =Morte::find($morte->id);
-        $this->desfazerMorte($morteBeforeSave);
+        self::$morteBeforeSave =Morte::find($morte->id);
+        //$this->desfazerMorte($morteBeforeSave);
     }
 
     /**
@@ -33,7 +35,13 @@ class MorteObserver
      */
     public function updated(Morte $morte)
     {
-        $this->addMorte($morte);
+        if($morte->produto->id!=self::$morteBeforeSave->produto->id):
+            $this->desfazerMorte(self::$morteBeforeSave);
+            $this->addMorte($morte);
+        else:
+            $this->updateMorte(self::$morteBeforeSave,$morte);
+        endif;
+        
     }
 
     /**
@@ -44,7 +52,6 @@ class MorteObserver
      */
     public function deleted(Morte $morte)
     {
-        \Log::info(\json_encode($morte));
         $this->desfazerMorte($morte);
     }
 
@@ -63,6 +70,14 @@ class MorteObserver
        
         $produto->qtd_estoque-=$morte->qtd; //novo estoque
        
+        $produto->save();
+    }
+
+    private function updateMorte(Morte $morteBefore, Morte $morte)
+    {
+        $produto= $morte->produto; //produto da morte
+        //$produto->setCustoMedioOnUpdateMorte($morteBefore, $morte);
+        $produto->qtd_estoque-= ($morte->qtd-$morteBefore->qtd);//add diferença do atual pelo anterior
         $produto->save();
     }
 

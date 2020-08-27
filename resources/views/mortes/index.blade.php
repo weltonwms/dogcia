@@ -37,6 +37,7 @@ Mortes'])
         <th>Produto</th>
         <th>Data Morte</th>
         <th>Qtd</th>
+        <th>Custo Médio Un</th>
         <th>Prejuízo</th>
         <th id>ID</th>
     </tr>
@@ -55,7 +56,8 @@ Mortes'])
         
         <td>{{$morte->data_morte}}</td>
         <td>{{$morte->qtd}}</td>
-        <td>{{$morte->custo_medio*$morte->qtd}}</td>
+        <td>{{Util::moneyToBr($morte->custo_medio, true)}}</td>
+        <td>{{Util::moneyToBr($morte->custo_medio*$morte->qtd, true)}}</td>
         <td>{{$morte->id}}</td>
     </tr>
     @endforeach
@@ -72,7 +74,8 @@ Mortes'])
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:5}); //instanciando dataTable e informando a coluna do id
+    var colId= $("thead [id]").index()
+    Tabela.getInstance({colId:colId}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 

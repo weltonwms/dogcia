@@ -13,13 +13,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Custo Médio Un</label>
-                    <input readonly="readonly" id="custo_medio" type="text" class="form-control" value="{{$produto->custo_medio }}">
+                    <input readonly="readonly" id="custo_medio" type="text" class="form-control" value="{{Util::moneytoBr($produto->custo_medio )}}">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Valor Venda</label>
-                    <input readonly="readonly" id="valor_venda" type="text" class="form-control" value="{{$produto->getValorVenda() }}">
+                    <input readonly="readonly" id="valor_venda" type="text" class="form-control" value="{{Util::moneyToBr($produto->getValorVenda()) }}">
                 </div>
             </div>
             <div class="col-md-3">
@@ -37,10 +37,10 @@
 @push("scripts")
 <script>
     function changeMargem(){
-        var margem=parseFloat($("#margem").val());
-        var custo_medio=parseFloat($("#custo_medio").val());
+        var margem= ler_valor("#margem");
+        var custo_medio= ler_valor("#custo_medio");
         var valor_venda= custo_medio*(margem/100 +1);
-        $("#valor_venda").val(valor_venda);
+        $("#valor_venda").val(valorFormatado(valor_venda));
         console.log('margem',margem);
         console.log('custo',custo_medio);
     }

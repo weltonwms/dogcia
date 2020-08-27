@@ -25,6 +25,11 @@ class Morte extends Model
     {
         return Carbon::parse($value)->format('Y-m-d');
     }
+
+    public function formCustoMedioAttribute($value)
+    {
+        return \Util::formatNumber($value);
+    }
     
     public function setDataMorteAttribute($value){
         if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $value)) { //verifica se é formato dd/mm/aaaa

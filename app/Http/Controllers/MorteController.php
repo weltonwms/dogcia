@@ -43,12 +43,24 @@ class MorteController extends Controller
      */
     public function store(MorteRequest $request)
     {
-        $morte = Morte::create($request->all());
-        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
-        if ($request->input('fechar') == 1):
+        try{
+            $morte=\DB::transaction(function () use ($request){
+                return Morte::create($request->all());
+                
+            });
+
+            \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
+            if ($request->input('fechar') == 1):
+                return redirect()->route('mortes.index');
+            endif;
+            return redirect()->route('mortes.edit',$morte->id);
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
             return redirect()->route('mortes.index');
-        endif;
-        return redirect()->route('mortes.edit',$morte->id);
+        }
+       
+       
     }
 
     /**
@@ -87,8 +99,17 @@ class MorteController extends Controller
      */
     public function update(MorteRequest $request, Morte $morte)
     {
-        $morte->update($request->all());
-        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+        try{
+            \DB::transaction(function () use ($morte,$request){
+                $morte->update($request->all());
+                \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+
+            });
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
+        }
+        
         if ($request->input('fechar') == 1):
             return redirect()->route('mortes.index');
         endif;

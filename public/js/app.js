@@ -90,7 +90,7 @@ $(document).ready(function () {
     $('.select2').select2();
     $('#formProduto_produto_id').select2({
          dropdownParent: $('#ModalFormProduto'),
-         theme: "bootstrap",
+         //theme: "bootstrap",
           width: 'style' 
         //width:auto
      });
@@ -101,4 +101,27 @@ function limparFormPesquisa(){
     $('#form_pesquisa select, #form_pesquisa input[type=date]').val('');
     $('#form_pesquisa select').trigger('change'); //avisar select2
 }
+
+function valorFormatado(valorNumber){
+    var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
+    if(isNaN(v)){
+        //mesmo assim se não form um número para aqui.
+        return "";
+    }
+    var valor_formatado = v.toFixed(2).toString().replace('.', ',');
+    return valor_formatado; //string formatada
+}
+
+function moneyBrToFloat(valor){
+    if(valor){
+        return parseFloat( valor.toString().replace('.', '').replace(',', '.') );
+       
+    }
+}
+
+function ler_valor(campo) {
+    return moneyBrToFloat($(campo).val());
+  
+}
+
 
