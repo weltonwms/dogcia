@@ -64,7 +64,9 @@ ProdutoVendaModel= (function Produtos() {
         var produto_id = $("#formProduto_produto_id").val();
         var qtd = $("#formProduto_qtd").val();
         var valor_venda = ler_valor("#formProduto_valor_venda");
-        var item = {produto_id: produto_id, qtd: qtd, valor_venda: valor_venda};
+        var custo_medio=ler_valor("#formProduto_custo_medio");
+        
+        var item = {produto_id: produto_id, qtd: qtd, valor_venda: valor_venda,custo_medio:custo_medio};
         if (id) {
             updateItem(item, id);
             $('#ModalFormProduto').modal('hide');
@@ -81,6 +83,7 @@ ProdutoVendaModel= (function Produtos() {
         TelaProduto.setIndex(index);
         TelaProduto.setCurrentProduto(item.produto_id);
         TelaProduto.setQtd(item.qtd);
+        //TelaProduto.setCustoMedio(item.custo_medio);
         TelaProduto.setValorVenda(item.valor_venda);
         TelaProduto.writeForEdit();
         
@@ -102,7 +105,7 @@ ProdutoVendaModel= (function Produtos() {
             var product = getObjProduct(item.produto_id);
             return "<tr>" +
                     "<td>" + (i + 1) + "</td>" +
-                    "<td>" + product.nome + "</td>" +
+                    "<td>" + product.nome_completo + "</td>" +
                     "<td>" + item.qtd + "</td>" +
                     "<td>" + valorFormatado(item.valor_venda) + "</td>" +
                     "<td>" + valorFormatado(getTotalItem(i)) + "</td>" +
@@ -144,6 +147,7 @@ TelaProduto=(function(){
 
     function setCurrentProduto(produto_id){
         currentProduto=produto_id?getObjProduct(produto_id):null;
+        console.log(currentProduto);
     }
 
     function getCurrentProduto(){
@@ -169,7 +173,7 @@ TelaProduto=(function(){
             return null;
         }
         var qtdGravada= ItensGravados.getQtdGravadaByProduto(currentProduto.id); //qtdGravada Usada em Edição. Não desconta o que o próprio já tem gravado.
-        var resultado= parseInt(currentProduto.qtd_disponivel) - qtd + qtdGravada;
+        var resultado= parseInt(currentProduto.qtd_estoque) - qtd + qtdGravada;
                  
         return resultado;
     }
@@ -183,13 +187,15 @@ TelaProduto=(function(){
     }
 
     function write(){
-        $("#formProduto_qtd_disponivel").val(getQtdDisponivelAtual());
+        $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
+        $("#formProduto_custo_medio").val(valorFormatado(currentProduto.custo_medio));
+        $("#formProduto_margem").val(currentProduto.margem);
     }
 
     function writeForEdit(){
         $("#formProduto_produto_id").val(getProdutoId());
         $("#formProduto_qtd").val(qtd);
-        $("#formProduto_qtd_disponivel").val(getQtdDisponivelAtual());
+        $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
         $("#formProduto_valor_venda").val(valorFormatado(valor_venda));
         $("#formProduto_id").val(index);
         $('#formProduto_produto_id').trigger('change'); //avisar o select2 da mudança
@@ -205,7 +211,9 @@ TelaProduto=(function(){
         $("#formProduto_qtd").val('');
         $("#formProduto_valor_venda").val('');
         $("#formProduto_total").val('');
-        $("#formProduto_qtd_disponivel").val('');
+        $("#formProduto_qtd_estoque").val('');
+        $("#formProduto_custo_medio").val('');
+        $("#formProduto_margem").val('');
         $('#formProduto_produto_id').trigger('change'); //avisar o select2 da mudança
     }
 
@@ -271,16 +279,7 @@ function calculoTotal() {
     }
 }
 
-function valorFormatado(valorNumber){
-    var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
-    var valor_formatado = v.toFixed(2).toString().replace('.', ',');
-    return valor_formatado; //string formatada
-}
 
-function ler_valor(campo) {
-    var valor = $(campo).val().replace('.', '').replace(',', '.');
-    return parseFloat(valor);
-}
 
 function checkErrors(){
     var qtd= TelaProduto.getQtd();
@@ -291,7 +290,7 @@ function checkErrors(){
         errors.push("Produto não Selecionado");
         return errors; // Não tem como prosseguir sem produto_id
     }
-    var produto = getObjProduct(produto_id);
+    //var produto = getObjProduct(produto_id);
     if(!qtd || qtd < 1){
         errors.push("Quantidade Inválida");
     }

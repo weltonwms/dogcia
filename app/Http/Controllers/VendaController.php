@@ -44,7 +44,7 @@ class VendaController extends Controller
     public function store(VendaRequest $request)
     {
         $venda = Venda::create($request->all());
-        $this->saveProdutos($venda, $request);
+        //$this->saveProdutos($venda, $request);
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('vendas.index');
@@ -75,6 +75,7 @@ class VendaController extends Controller
         $dados = [
             'produtos' => \App\Produto::all(),
             'clientes' => \App\Cliente::pluck('nome', 'id'),
+            'sellers' => \App\Seller::pluck('nome', 'id'),
             'venda' => $venda,
         ];
         return view('vendas.edit', $dados);

@@ -64,17 +64,37 @@
                             <select class="form-control" id="formProduto_produto_id" style="width: 100%">
                                 <option value="">--Selecione--</option>
                                 <?php foreach ($produtos as $produto): ?>
+                                    <?php 
+                                    //calculos de  valor venda e nome_completo para js
+                                    $produto->valor_venda=$produto->getValorVenda() ;
+                                    $produto->nome_completo=$produto->getNomeCompleto();
+                                    ?>
                                     <option value="<?php echo $produto->id ?>" data-obj="<?php echo base64_encode(json_encode($produto)) ?>">
-                                        <?php echo $produto->nome ?>
+                                        <?php echo $produto->getNomeCompleto() ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label for="formProduto_qtd_disponivel" class="col-form-label">Qtd Disponível:</label>
-                            <input class="form-control" type="text" id="formProduto_qtd_disponivel" readonly>
+                            <label for="formProduto_qtd_estoque" class="col-form-label">Qtd Estoque:</label>
+                            <input class="form-control" type="text" id="formProduto_qtd_estoque" readonly>
                         </div>
+
+                        
+                        <div class="form-group col-md-8">
+                            <label for="formProduto_custo_medio" class="col-form-label">Custo Médio Un:</label>
+                            <input class="form-control" type="text" id="formProduto_custo_medio" readonly>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="formProduto_margem" class="col-form-label">Margem %:</label>
+                            <input class="form-control" type="text" id="formProduto_margem" readonly>
+                        </div>
+
+
+
+
 
 
                         <div class="form-group col-md-4">

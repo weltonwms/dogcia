@@ -1,6 +1,6 @@
 <div class="form-row">
     <div class="col-md-3">
-        {{ Form::bsSelect('cliente_id',$clientes,null,['label'=>"Cliente *", 'placeholder' => '--Selecione--','class'=>'select2']) }}
+        {{ Form::bsSelect('cliente_id',$clientes,null,['label'=>"Cliente *", 'class'=>'select2']) }}
 
     </div>
     <div class="col-md-3 ">
@@ -12,7 +12,7 @@
 
     <div class="col-md-3">
         <div class="form-group groupSerVivo">
-            <label for="" class="control-label yesno">Frete</label>
+            <label for="" class="control-label yesno">Frete *</label>
             {{ Form::bsYesno('frete','0') }} 
           </div>
 
@@ -20,7 +20,7 @@
 
     <div class="col-md-3">
         <div class="form-group groupSerVivo">
-            <label for="" class="control-label yesno">Carteira</label>
+            <label for="" class="control-label yesno">Carteira *</label>
             {{ Form::bsYesno('carteira','0') }} 
           </div>
 
@@ -55,6 +55,21 @@
 @enderror
 
 @include('vendas.produto-venda')
+
+@push("scripts")
+<script>
+    
+    function changeFreteCarteira(event){
+        var value= this.value;
+        if(value==1){
+            $("#status").val(2);
+            $('#status').trigger('change'); //avisar o select2 da mudança
+        }
+    }
+
+    $("[name=frete], [name=carteira]").change(changeFreteCarteira);
+</script>
+@endpush
 
 
 

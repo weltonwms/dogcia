@@ -10,7 +10,7 @@ class Venda extends Model
 {
     use FormAccessible;
     protected $fillable=['cliente_id','data_venda','frete', 'status', 
-    'carteira' ,'forma_pagamento', 'vendedor_id', 'observacao'];
+    'carteira' ,'forma_pagamento', 'seller_id', 'observacao'];
     protected $dates = array('data_venda');
     
     

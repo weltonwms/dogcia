@@ -28,9 +28,12 @@ class VendaRequest extends FormRequest
         return [
             'cliente_id'=>"required",
              'data_venda'=>"required|date",
-             'produtos_json'=>['required','not_in:[]', new ProductAvailable($venda)],
+            // 'produtos_json'=>['required','not_in:[]', new ProductAvailable($venda)],
              'seller_id'=>"required",
-             "forma_pagamento"=>"required"
+             "forma_pagamento"=>"required",
+             "status"=>"required",
+             "frete"=>"required",
+             "carteira"=>"required"
          ];
      }
      
