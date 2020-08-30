@@ -53,10 +53,9 @@ class ProdutoHelper
             $afect = 0;
             foreach ($produtosVenda as $produto):
                 $afect += \DB::update('update produtos
-		                set qtd_estoque = qtd_estoque + ?,
-		                qtd_disponivel = qtd_disponivel + ?
+		                set qtd_estoque = qtd_estoque + ?
 		                where id = ?',
-                    [$produto->qtd, $produto->qtd, $produto->produto_id]);
+                    [$produto->qtd, $produto->produto_id]);
 
             endforeach;
 

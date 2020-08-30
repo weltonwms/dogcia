@@ -44,7 +44,6 @@ class CompraObserver
             $this->updateCompra(self::$compraBeforeSave,$compra);
         endif;
             
-       
     }
 
     /**
@@ -63,7 +62,7 @@ class CompraObserver
     private function desfazerCompra(Compra $compra)
     {
         $produto=$compra->produto; //produto da Compra deletada
-        $produto->setCustoMedioOnRemoveCompra($compra); //novo custo médio
+        $produto->setCustoMedioOnEvent(-$compra->getTotal(), -$compra->qtd); //novo custo médio
         $produto->qtd_estoque-=$compra->qtd; //novo estoque
         $produto->save();
     }
@@ -71,7 +70,7 @@ class CompraObserver
     private function addCompra(Compra $compra)
     {
         $produto= $compra->produto; //produto da compra
-        $produto->setCustoMedioOnAddCompra($compra); //novo custo médio
+        $produto->setCustoMedioOnEvent($compra->getTotal(), $compra->qtd); //novo custo médio
         $produto->qtd_estoque+=$compra->qtd; //novo estoque
         $produto->save();
     }
@@ -79,8 +78,13 @@ class CompraObserver
     private function updateCompra(Compra $compraBefore, Compra $compra)
     {
         $produto= $compra->produto; //produto da compra
-        $produto->setCustoMedioOnUpdateCompra($compraBefore, $compra);
-        $produto->qtd_estoque+= ($compra->qtd-$compraBefore->qtd);//add diferença do atual pelo anterior
+        //análise das diferenças
+        $totalCompraDiferenca=$compra->getTotal() - $compraBefore->getTotal();
+        $qtdCompraDiferenca= $compra->qtd - $compraBefore->qtd;
+        //Novo custo médio baseado na diferença
+        $produto->setCustoMedioOnEvent($totalCompraDiferenca, $qtdCompraDiferenca);
+
+        $produto->qtd_estoque+= $qtdCompraDiferenca;//add diferença do atual pelo anterior
         $produto->save();
     }
 }

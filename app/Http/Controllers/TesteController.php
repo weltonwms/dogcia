@@ -28,6 +28,12 @@ class TesteController extends Controller
         ->get()
         ->keyBy('produto_id');
 
+        $totalVendas=\DB::table('produto_venda')
+        ->selectRaw(" produto_id, SUM(custo_medio*qtd) as totalValor, SUM(qtd) as totalQtd")
+        ->groupBy('produto_id')
+        ->get()
+        ->keyBy('produto_id');
+
         $produtos=\App\Produto::all();
         foreach($produtos as $produto):
             
@@ -35,6 +41,8 @@ class TesteController extends Controller
             $totalCompras_qtd=0;
             $mortes_valor=0;
             $mortes_qtd=0;
+            $vendas_valor=0;
+            $vendas_qtd=0;
             if(isset($totalCompras[$produto->id])){
                 $totalCompras_valor=$totalCompras[$produto->id]->totalValor;
                 $totalCompras_qtd=$totalCompras[$produto->id]->totalQtd;
@@ -43,10 +51,16 @@ class TesteController extends Controller
                 $mortes_valor=$totalMortes[$produto->id]->totalValor;
                 $mortes_qtd=$totalMortes[$produto->id]->totalQtd;
             }
+            if(isset($totalVendas[$produto->id])){
+                $vendas_valor=$totalVendas[$produto->id]->totalValor;
+                $vendas_qtd=$totalVendas[$produto->id]->totalQtd;
+            }
+            $saidas_qtd=$mortes_qtd+$vendas_qtd;
+            $saidas_valor=$mortes_valor+$vendas_valor;
             $valorEstoque=$produto->custo_medio*$produto->qtd_estoque;
-            $teste1=$totalCompras_qtd==$produto->qtd_estoque+$mortes_qtd;
-            // $teste2= bccomp($totalCompras_valor,$valorEstoque+$mortes_valor,1)==0?true:false;
-            $teste2= round($totalCompras_valor)==round($valorEstoque+$mortes_valor);
+            $teste1=$totalCompras_qtd==$produto->qtd_estoque+$saidas_qtd;
+            // $teste2= bccomp($totalCompras_valor,$valorEstoque+$saidas_valor,1)==0?true:false;
+            $teste2= round($totalCompras_valor)==round($valorEstoque+$saidas_valor);
 
             if(request('false')!=1 || !$teste1 || !$teste2){
                 echo "<h3>Produto: {$produto->nome} Cód: {$produto->id} </h3>";
@@ -54,6 +68,8 @@ class TesteController extends Controller
                 echo "<br>Compras QTD: ".$totalCompras_qtd;
                 echo "<br>Mortes Valor: ".$mortes_valor;
                 echo "<br>Mortes QTD: ".$mortes_qtd;
+                echo "<br>Vendas Valor: ".$vendas_valor;
+                echo "<br>Vendas QTD: ".$vendas_qtd;
                 //echo "<br> round".round($valorEstoque);
                
                 
@@ -65,7 +81,7 @@ class TesteController extends Controller
                 echo "Custo Médio Atual: ".$produto->custo_medio;
                 echo "<br>Entradas==Estoque+Saidas: ".boolStr($teste2);
                 $den=$produto->qtd_estoque==0?1:$produto->qtd_estoque;
-                echo "<br>Fórmula2 Custo: ".($totalCompras_valor - $mortes_valor)/$den;
+                echo "<br>Fórmula2 Custo: ".($totalCompras_valor - $saidas_valor)/$den;
     
                 echo "<hr>";
             }

@@ -12,9 +12,9 @@ class ProdutoVendaObserver
 
     public function created(ProdutoVenda $venda)
     {
+        //exit('event creadte');
         $produto=\App\Produto::find($venda->produto_id);
         $produto->qtd_estoque-=$venda->qtd;
-        $produto->qtd_disponivel-=$venda->qtd;
         $produto->save();
 
     }
@@ -32,7 +32,6 @@ class ProdutoVendaObserver
     {
         $produto=\App\Produto::find($venda->produto_id);
         $produto->qtd_estoque-= $venda->qtd - self::$vendaBeforeSave->qtd;
-        $produto->qtd_disponivel-= $venda->qtd - self::$vendaBeforeSave->qtd;
         $produto->save();
 
     }
@@ -43,6 +42,7 @@ class ProdutoVendaObserver
         self::$vendaBeforeDeleted =ProdutoVenda::where('produto_id',$venda->produto_id)
         ->where('venda_id',$venda->venda_id)
         ->first();
+        \Log::info('Deleting ProdutoVendaObserver acionado. Pvenda qtd: '.self::$vendaBeforeDeleted->qtd);
 
     }
    
@@ -50,10 +50,12 @@ class ProdutoVendaObserver
     {
         $produto=\App\Produto::find($venda->produto_id);
         $qtdApagada=self::$vendaBeforeDeleted->qtd;
-       
-        $produto->qtd_estoque+= $qtdApagada;
-        $produto->qtd_disponivel+= $qtdApagada;
+        $total=self::$vendaBeforeDeleted->custo_medio*$qtdApagada;
 
+        $produto->setCustoMedioOnEvent($total,$qtdApagada);
+        $produto->qtd_estoque+= $qtdApagada;
+        \Log::info('deleted ProdutoVendaObserver acionado. Pvenda '.\json_encode(self::$vendaBeforeDeleted));
+        
         $produto->save();
     }
 

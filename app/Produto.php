@@ -129,51 +129,18 @@ class Produto extends Model
     }
 
     /**
-     * Método baseado em formula de Custo Médio. Recebe uma Compra atual.
-     * A formula basea-se no que está sendo adquirido e no que já tinha
+     * Método baseado em formula de Custo Médio. Recebe um total e qtd atual.
+     * A formula basea-se no que está sendo adquirido, atualizado ou desfeito
+     * e no que já tinha
      */
-    public function setCustoMedioOnAddCompra(Compra $compra)
+    public function setCustoMedioOnEvent($total, $qtd)
     {
-        $numerador= $compra->getTotal() + ($this->custo_medio * $this->qtd_estoque);
-        $denoninador= $compra->qtd + $this->qtd_estoque;
+        $numerador= $total + ($this->custo_medio * $this->qtd_estoque);
+        $denoninador= $qtd + $this->qtd_estoque;
         $custo_medio= $denoninador==0?0:($numerador/$denoninador);
         $this->custo_medio=$custo_medio;
-
     }
 
-    /**
-     * Método baseado em formula de Custo Médio. Recebe uma Compra a ser Desfeita.
-     * Desfaz a Compra no custo médio
-     */
-    public function setCustoMedioOnRemoveCompra(Compra $compra)
-    {
-        $numerador= -$compra->getTotal() + ($this->custo_medio * $this->qtd_estoque);
-        $denoninador= -$compra->qtd + $this->qtd_estoque;
-        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
-        $this->custo_medio=$custo_medio;
-
-    }
-
-    public function setCustoMedioOnUpdateCompra(Compra $compraBefore,Compra $compra)
-    {
-        $totalCompraDiferenca=$compra->getTotal() - $compraBefore->getTotal();
-        $qtdCompraDiferenca= $compra->qtd - $compraBefore->qtd;
-        $numerador= $totalCompraDiferenca + ($this->custo_medio * $this->qtd_estoque);
-        $denoninador= $qtdCompraDiferenca + $this->qtd_estoque;
-        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
-        $this->custo_medio=$custo_medio;
-
-    }
-
-
-    public function setCustoMedioOnDesfazerMorte($morte)
-    {
-        $numerador= $morte->getTotal() + ($this->custo_medio * $this->qtd_estoque);
-        $denoninador= $morte->qtd + $this->qtd_estoque;
-        $custo_medio= $denoninador==0?0:($numerador/$denoninador);
-        $this->custo_medio=$custo_medio;
-
-    }
 
     public function save(array $options = array())
     {
@@ -182,8 +149,6 @@ class Produto extends Model
         endif;
        
         parent::save($options);
-      
-     
     }
   
 

@@ -9,6 +9,22 @@ use Collective\Html\Eloquent\FormAccessible;
 class Venda extends Model
 {
     use FormAccessible;
+
+
+    public static function boot() 
+    {
+        //add listener via boot;
+        parent::boot();
+        self::deleting(function($venda){ 
+            \Log::info('Deleting Venda '.$venda->id." acionado.");
+            //removendo produtos da venda antes de remover a venda
+            //Ação necessária para disparar eventos e problemas com banco se não houvesse cascade
+            //Poderia usar detach, mas para disparar evento no detach tem que passar array ids.
+            $venda->produtos()->sync([]); 
+            return true; // let the delete go through
+        });
+    }
+
     protected $fillable=['cliente_id','data_venda','frete', 'status', 
     'carteira' ,'forma_pagamento', 'seller_id', 'observacao'];
     protected $dates = array('data_venda');
@@ -18,7 +34,7 @@ class Venda extends Model
     {
         return $this->belongsToMany('App\Produto')
                 ->using('App\ProdutoVenda')
-                ->withPivot('qtd', 'valor_venda','granel')
+                ->withPivot('qtd', 'valor_venda', 'custo_medio','granel')
                 ->withTimestamps();
     }
     
@@ -66,6 +82,7 @@ class Venda extends Model
              $x->qtd=$produto->pivot->qtd;
              $x->granel=$produto->pivot->granel;
              $x->valor_venda=$produto->pivot->valor_venda;
+             $x->custo_medio=$produto->pivot->custo_medio;
              $list[]=$x;
          endforeach;
          return json_encode($list);

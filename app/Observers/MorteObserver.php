@@ -58,7 +58,7 @@ class MorteObserver
     private function desfazerMorte(Morte $morte)
     {
         $produto=$morte->produto; //produto da Morte deletada
-        $produto->setCustoMedioOnDesfazerMorte($morte); //novo custo médio
+        $produto->setCustoMedioOnEvent($morte->getTotal(),$morte->qtd); //novo custo médio
         $produto->qtd_estoque+=$morte->qtd; //novo estoque
         
         $produto->save();
@@ -67,9 +67,7 @@ class MorteObserver
     private function addMorte(Morte $morte)
     {
         $produto= $morte->produto; //produto da morte
-       
         $produto->qtd_estoque-=$morte->qtd; //novo estoque
-       
         $produto->save();
     }
 

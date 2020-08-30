@@ -25,7 +25,7 @@
      )!!}
 &nbsp;&nbsp;
 <label class="text-primary">Estoque</label>
-{!!Form::select('estoque', [''=>"Todos",'1'=>">0",'0' => '=0'], 
+{!!Form::select('estoque', [''=>"Todos",'1'=>">=1",'0' => '=0'], 
     request('estoque'),
     ['onchange'=>"this.form.submit()"]
 )!!}
