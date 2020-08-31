@@ -34,6 +34,14 @@
 <script type="text/javascript" src="{{ asset('template/js/plugins/responsive.bootstrap.min.js') }}"></script>-->
 <script type="text/javascript" src="{{ asset('template/js/plugins/dataTables.select.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/tabela.js') }}"></script>
+<script>
+    $(document).ready(function() {
+    var colId= $("thead [id]").index()
+    if(colId >0){
+        Tabela.getInstance({colId:colId}); //instanciando dataTable e informando a coluna do id
+    }
+});
+</script>
 
 
 @endpush

@@ -45,6 +45,22 @@ class Venda extends Model
     public function seller(){
         return $this->belongsTo("App\Seller");
     }
+
+    public static function getAllByFiltros(){
+        $query = self::with('cliente')->with('seller');
+        $request = request();
+        if (is_numeric($request->frete)):
+            $query->where('frete', $request->frete);
+        endif;
+        if (is_numeric($request->carteira)):
+            $query->where('carteira', $request->carteira);
+        endif;
+        if (is_numeric($request->status)):
+            $query->where('status',  $request->status);
+        endif;
+        return $query->get();
+        
+    }
     
      public function getDataVendaAttribute($value)
     {
@@ -97,7 +113,23 @@ class Venda extends Model
         return $total;
     }
 
-    public function getTotalGeralFormatado(){
-        return "R$ ".number_format($this->getTotalGeral(),2,",",".");
+    public function isFreteNome(){
+        return $this->frete?"Sim":"Não";
     }
+
+    public function isCarteiraNome(){
+        return $this->carteira?"Sim":"Não";
+    }
+
+    public function statusNome(){
+        return $this->status==1?"Pago":"Não Pago";
+    }
+
+    public function formaPagamentoNome(){
+        $nomes=["","Dinheiro","Cartão Crédito","Cartão Débito"];
+        if(isset($nomes[$this->forma_pagamento])):
+            return $nomes[$this->forma_pagamento];
+        endif;
+    }
+    
 }

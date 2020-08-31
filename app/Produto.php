@@ -14,7 +14,7 @@ class Produto extends Model
     {
         return $this->belongsToMany('App\Venda')
             ->using('App\ProdutoVenda')
-            ->withPivot('qtd', 'valor_venda')
+            ->withPivot('qtd', 'granel', 'custo_medio', 'valor_venda')
             ->withTimestamps();
     }
 

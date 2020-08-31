@@ -34,18 +34,43 @@ Vendas'])
 
 @section('content')
 
+<div class="tile tile-nomargin">
+  <form action="{{route('vendas.index')}}"> 
 
+    <label class="text-primary">Status</label>
+ {!!Form::select('status', [''=>"Todos",'1'=>"Pago",'2' => 'Não Pago'], 
+     request('status'),
+     ['onchange'=>"this.form.submit()"]
+ )!!}
+ &nbsp;&nbsp;
+     <label class="text-primary">Frete</label>
+     {!!Form::select('frete', [""=>"Todos",'1' => 'Sim', '0' => 'Não'],
+         request('frete'),
+         ['onchange'=>"this.form.submit()"]
+      )!!}
+ &nbsp;&nbsp;
+ <label class="text-primary">Carteira</label>
+     {!!Form::select('carteira', [""=>"Todos",'1' => 'Sim', '0' => 'Não'],
+         request('carteira'),
+         ['onchange'=>"this.form.submit()"]
+      )!!}
+
+  </form> 
+ </div>
 
 @datatables
 <thead>
     <tr>
         <th><input class="checkall" type="checkbox"></th>
-        <th>ID</th>
+        <th>Status</th>
         <th>Cliente</th>
         <th>Data Venda</th>
-
+        <th>Frete</th>
+        <th>Carteira</th>
+        <th>Forma Pagamento</th>
+        <th>Vendedor</th>
         <th>Observação</th>
-        <th>ID</th>
+        <th id>ID</th>
     </tr>
 </thead>
 
@@ -56,11 +81,14 @@ Vendas'])
         <td></td>
         <td>
             <button onclick="showDetailVenda(event)" data-id="{{$venda->id}}" class="btn btn-light btn-sm"><i class="fa fa-eye"></i></button>
-            <a href="{{route('vendas.edit', $venda->id)}}">{{$venda->id}}</a>
+            <a href="{{route('vendas.edit', $venda->id)}}">{{$venda->statusNome()}}</a>
         </td>
         <td>{{$venda->cliente->nome}}</td>
         <td>{{$venda->data_venda}}</td>
-
+        <td>{{$venda->isFreteNome()}}</td>
+        <td>{{$venda->isCarteiraNome()}}</td>
+        <td>{{$venda->formaPagamentoNome()}}</td>
+        <td>{{$venda->seller->nome}}</td>
         <td>{{$venda->observacao}}</td>
         <td>{{$venda->id}}</td>
     </tr>
@@ -95,14 +123,7 @@ Vendas'])
 
 @push('scripts')
 <script>
-    /**
-     * First start on Table
-     * **********************************
-     */
-$(document).ready(function() {
-    Tabela.getInstance({colId:5}); //instanciando dataTable e informando a coluna do id
-});
-   //fim start Datatable//
+ 
 function showDetailVenda(event){
     event.preventDefault();
     var dados= event.currentTarget.dataset;

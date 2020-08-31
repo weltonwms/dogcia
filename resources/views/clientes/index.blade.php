@@ -24,7 +24,7 @@
         <th>Telefone</th>
        
         <th>Endereço</th>
-        <th>ID</th>
+        <th id>ID</th>
     </tr>
 </thead>
 
@@ -44,16 +44,3 @@
 @enddatatables
 @endsection
 
-@push('scripts')
-
-<script>
-    /*
-     * First start on Table
-     * **********************************
-     */
-$(document).ready(function() {
-    Tabela.getInstance({colId:5}); //instanciando dataTable e informando a coluna do id
-});
-   //fim start Datatable//
-</script>
-@endpush

@@ -67,20 +67,3 @@ Mortes'])
 
 @endsection
 
-@push('scripts')
-<script>
-    /**
-     * First start on Table
-     * **********************************
-     */
-$(document).ready(function() {
-    var colId= $("thead [id]").index()
-    Tabela.getInstance({colId:colId}); //instanciando dataTable e informando a coluna do id
-});
-   //fim start Datatable//
-
- 
-
-</script>
-
-@endpush

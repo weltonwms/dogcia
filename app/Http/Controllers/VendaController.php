@@ -16,7 +16,7 @@ class VendaController extends Controller
      */
     public function index()
     {
-       $vendas = Venda::with('cliente')->get();
+       $vendas = Venda::getAllByFiltros();
        return view("vendas.index", compact('vendas'));
     }
 
