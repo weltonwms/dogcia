@@ -28,6 +28,7 @@ ProdutoVendaModel= (function Produtos() {
     function inicializeItems() {
         var itemsJson = $("#produtos_json").val() || '[]';
         var itemsObj = JSON.parse(itemsJson);
+        //iniciar para edição
         ItensGravados.setItems();
         items = itemsObj;
         updateTableProduto();
@@ -80,11 +81,12 @@ ProdutoVendaModel= (function Produtos() {
         event.preventDefault();
         var index = $(this).attr('editProduct');
         var item = items[index];
+       
         TelaProduto.setIndex(index);
         TelaProduto.setCurrentProduto(item.produto_id);
         TelaProduto.setQtd(item.qtd);
         //TelaProduto.setCustoMedio(item.custo_medio);
-        TelaProduto.setValorVenda(item.valor_venda);
+       // TelaProduto.setValorVenda(item.valor_venda);
         TelaProduto.writeForEdit();
         
         $('#ModalFormProduto').modal('show');
@@ -117,6 +119,7 @@ ProdutoVendaModel= (function Produtos() {
         $("#total_geral_tabela").html(valorFormatado(getTotalGeral()));
         $("a[editProduct]").click(editProduct);
         $("a[deleteProduct]").click(deleteProduct);
+        
         //console.log(tableItems);
     }
 
@@ -141,13 +144,18 @@ ProdutoVendaModel= (function Produtos() {
 
 TelaProduto=(function(){
     var currentProduto;
+    var produtoVendaModel; //model relacionado. Produto já salvo na lista. Usado em Edição
     var qtd=0;
-    var valor_venda; //uso posterior para representar toda tela
-    var index; //indice do item alugado já salvo na Lista. Usado para Edição
+    var index; //indice do item vendido já salvo na Lista. Usado para Edição
+    //atributos abaixo não são usados devido a suposições de valores de currentProduto ou produtoVendaModel
+    var valor_venda; 
+    var margem;
+    var custo_medio;
 
     function setCurrentProduto(produto_id){
         currentProduto=produto_id?getObjProduct(produto_id):null;
-        console.log(currentProduto);
+        //ao mudar o currentProduto, setar o model relacionado a esse produto se houver
+        produtoVendaModel=ProdutoVendaModel.getProdutoVenda(produto_id);
     }
 
     function getCurrentProduto(){
@@ -168,6 +176,20 @@ TelaProduto=(function(){
         }
     }
 
+    function getValorVenda(){
+        if(produtoVendaModel){
+            return produtoVendaModel.valor_venda;
+        }
+        return currentProduto.valor_venda;
+    }
+
+    function getCustoMedio(){
+        if(produtoVendaModel){
+            return produtoVendaModel.custo_medio;
+        }
+        return currentProduto.custo_medio;
+    }
+
     function getQtdDisponivelAtual(){
         if(!currentProduto){
             return null;
@@ -178,34 +200,65 @@ TelaProduto=(function(){
         return resultado;
     }
 
-    function setValorVenda(valor){
-        valor_venda=valor;
-    }
+    // function setValorVenda(valor){
+    //     valor_venda=valor;
+    // }
 
     function setIndex(valor){
         index=valor;
     }
 
     function write(){
+       
+       // console.log('valor Venda write Tela: ',currentProduto.valor_venda)
+        $("#formProduto_valor_venda").val(valorFormatado(getValorVenda()));
         $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
-        $("#formProduto_custo_medio").val(valorFormatado(currentProduto.custo_medio));
+        $("#formProduto_custo_medio").val(valorFormatado(getCustoMedio()));
         $("#formProduto_margem").val(currentProduto.margem);
     }
 
     function writeForEdit(){
+        
+        $("#formProduto_id").val(index);
         $("#formProduto_produto_id").val(getProdutoId());
         $("#formProduto_qtd").val(qtd);
+        //avisar o select2 da mudança ; chamada implicita de write()
+        $('#formProduto_produto_id').trigger('change'); 
+
+    }
+
+
+    function onChangeQtd(event){
+        setQtd(this.value);
         $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
-        $("#formProduto_valor_venda").val(valorFormatado(valor_venda));
-        $("#formProduto_id").val(index);
-        $('#formProduto_produto_id').trigger('change'); //avisar o select2 da mudança
+    }
+
+    function onChangeProduto(event) {
+        setCurrentProduto(this.value);
+        if (!this.value)
+        {
+            return false; //não é possível fazer nada se não tiver valor;
+        }
+        if (!isDuplicateProduct(this.value))
+        {
+            // var produto = getObjProduct(this.value);
+            //$("#formProduto_valor_venda").val(valorFormatado(produto.valor_venda));
+            write();
+            calculoTotal();
+        }
+        else
+        {
+            setCurrentProduto('');
+            $('#formProduto_produto_id').val(''); //analisar TelaProduto.write()
+            alert('Produto já encontra-se na Lista');
+        }
     }
 
     function resetFormProduto() {
         currentProduto=null;
         qtd=null;
         index=null;
-        valor_venda=null;
+        //valor_venda=null;
         $("#formProduto_id").val('');
         $("#formProduto_produto_id").val('');
         $("#formProduto_qtd").val('');
@@ -222,13 +275,15 @@ TelaProduto=(function(){
         getCurrentProduto:getCurrentProduto,
         setQtd:setQtd,
         getQtd:getQtd,
-        setValorVenda:setValorVenda,
+       // setValorVenda:setValorVenda,
         setIndex:setIndex,
         getProdutoId:getProdutoId,
         getQtdDisponivelAtual:getQtdDisponivelAtual,
         write:write,
         writeForEdit:writeForEdit,
-        resetFormProduto:resetFormProduto
+        resetFormProduto:resetFormProduto,
+        onChangeQtd:onChangeQtd,
+        onChangeProduto:onChangeProduto
     };
 })();
 //Classe usada para saber o que já tem gravado no backend. Útil para cálculo de qtd Disponível
@@ -271,7 +326,6 @@ function calculoTotal() {
     //console.log('valor_venda', valor_venda); 
     if (qtd && valor_venda) {
         var total = qtd * valor_venda;
-        
         $("#formProduto_total").val(valorFormatado(total));
 
     } else {
@@ -304,57 +358,6 @@ function checkErrors(){
     return errors;
 }
 
-
-
-
-ProdutoVendaModel.inicializeItems();
-$("#btn_save_item").click(function () {
-    var errors=checkErrors();
-    if(errors.length===0){
-        ProdutoVendaModel.saveItem();
-        TelaProduto.resetFormProduto();
-        ProdutoVendaModel.updateTableProduto();
-        console.log(ProdutoVendaModel.getItems());
-    }
-    else{
-        alert(errors.join('\n'));
-    }
-    
-});
-
-$('#ModalFormProduto').on('hidden.bs.modal', function (e) {
-    TelaProduto.resetFormProduto();
-});
-
-$('#formProduto_produto_id').change(function (e) {
-    TelaProduto.setCurrentProduto(this.value);
-    if(!this.value){
-        return false; //não é possível fazer nada se não tiver valor;
-    }
-    if(!isDuplicateProduct(this.value)){
-        var produto = getObjProduct(this.value);
-        $("#formProduto_valor_venda").val(valorFormatado(produto.valor_venda));
-        TelaProduto.write();
-        calculoTotal();
-    }
-    else{
-        TelaProduto.setCurrentProduto('');
-        $('#formProduto_produto_id').val(''); //analisar TelaProduto.write()
-        alert('Produto já encontra-se na Lista');
-    }
- 
-});
-
-
-$("#formProduto_qtd, #formProduto_valor_venda ").on("change", function () {
-    calculoTotal();
-});
-
-$("#formProduto_qtd").on("input", function (e) {
-    TelaProduto.setQtd(this.value);
-    TelaProduto.write();
-});
-
 function isDuplicateProduct(produto_id){
     var items= ProdutoVendaModel.getItems();
     var indexEncontrado= items.findIndex(function(item){
@@ -369,3 +372,34 @@ function isDuplicateProduct(produto_id){
     }
     return false;
 }
+
+
+
+
+ProdutoVendaModel.inicializeItems(); //iniciar em Edição
+$("#btn_save_item").click(function () {
+    var errors=checkErrors();
+    if(errors.length===0){
+        ProdutoVendaModel.saveItem();
+        TelaProduto.resetFormProduto();
+        ProdutoVendaModel.updateTableProduto();
+        console.log(ProdutoVendaModel.getItems());
+    }
+    else{
+        alert(errors.join('\n'));
+    }
+    
+});
+
+$('#ModalFormProduto').on('hidden.bs.modal',TelaProduto.resetFormProduto);
+
+$('#formProduto_produto_id').change(TelaProduto.onChangeProduto);
+
+$("#formProduto_qtd").on("input",TelaProduto.onChangeQtd);
+
+$("#formProduto_qtd, #formProduto_valor_venda ").on("change", function () {
+    calculoTotal();
+});
+
+
+

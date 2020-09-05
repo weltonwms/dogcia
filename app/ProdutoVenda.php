@@ -13,6 +13,10 @@ class ProdutoVenda extends Pivot
         return $this->valor_venda * $this->qtd;
     }
 
+    public function  getCustoTotal(){
+        return $this->custo_medio * $this->qtd;
+    }
+
     public function getTotalFormatado(){
         return "R$ ".number_format($this->getTotal(),2,",",".");
     }

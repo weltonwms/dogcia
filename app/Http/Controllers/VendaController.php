@@ -43,15 +43,25 @@ class VendaController extends Controller
      */
     public function store(VendaRequest $request)
     {
-        //dd($request->all());
-        $venda = Venda::create($request->all());
-        $this->saveProdutos($venda, $request);
-        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
-        if ($request->input('fechar') == 1):
+        $ctrl=$this;
+        try{
+            $venda=\DB::transaction(function () use ($request, $ctrl){
+                $venda = Venda::create($request->all());
+                $ctrl->saveProdutos($venda, $request);
+                return $venda;
+            });
+            \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
+            if ($request->input('fechar') == 1):
+                return redirect()->route('vendas.index');
+            endif;
+            return redirect()->route('vendas.edit',$venda->id);
+
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
             return redirect()->route('vendas.index');
-        endif;
-        return redirect()->route('vendas.edit',$venda->id);
-       
+        }
+     
     }
 
     /**
@@ -91,9 +101,19 @@ class VendaController extends Controller
      */
     public function update(VendaRequest $request, Venda $venda)
     {
-        $venda->update($request->all());
-        $this->saveProdutos($venda, $request);
-        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+        $ctrl=$this;
+        try{
+            \DB::transaction(function () use ($venda, $request, $ctrl){
+                $venda->update($request->all());
+                $ctrl->saveProdutos($venda, $request);
+                \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+            });
+
+        }
+        catch(\Exception $e){
+            \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
+        }
+       
         if ($request->input('fechar') == 1):
             return redirect()->route('vendas.index');
         endif;

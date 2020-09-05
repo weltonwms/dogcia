@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\ProdutoVenda;
-use App\Helpers\ProdutoHelper;
 
 class ProdutoVendaObserver
 {
@@ -12,11 +11,10 @@ class ProdutoVendaObserver
 
     public function created(ProdutoVenda $venda)
     {
-        //exit('event creadte');
         $produto=\App\Produto::find($venda->produto_id);
         $produto->qtd_estoque-=$venda->qtd;
         $produto->save();
-
+        \Log::info('created produto id: '.$produto->id);
     }
 
     public function updating(ProdutoVenda $venda)
@@ -30,10 +28,19 @@ class ProdutoVendaObserver
    
     public function updated(ProdutoVenda $venda)
     {
-        $produto=\App\Produto::find($venda->produto_id);
-        $produto->qtd_estoque-= $venda->qtd - self::$vendaBeforeSave->qtd;
-        $produto->save();
+        //análise das diferenças
+        $totalCustoDiferenca= self::$vendaBeforeSave->getCustoTotal() - $venda->getCustoTotal();
+        $qtdVendaDiferenca= self::$vendaBeforeSave->qtd  - $venda->qtd;
+        
+        \Log::info('totalCustoDiferenca: '.$totalCustoDiferenca);
+        \Log::info('qtdVendaDiferenca: '.$qtdVendaDiferenca);
 
+        $produto=\App\Produto::find($venda->produto_id);
+        //Novo custo médio baseado na diferença
+        $produto->setCustoMedioOnEvent($totalCustoDiferenca, $qtdVendaDiferenca);
+        $produto->qtd_estoque+= $qtdVendaDiferenca;
+        $produto->save();
+        \Log::info('updated produto id: '.$produto->id);
     }
 
 

@@ -17,6 +17,17 @@ class Compra extends Model
         return $this->belongsTo("App\Produto");
     }
 
+    public static function getAllByFiltros(){
+        $query = self::with('produto');
+        $request = request();
+        if ($request->produto_id):
+            $query->where('produto_id', $request->produto_id);
+        endif;
+       
+        return $query->get();
+        
+    }
+
     public function getVencimentoAttribute($value)
     {
         if ($value):

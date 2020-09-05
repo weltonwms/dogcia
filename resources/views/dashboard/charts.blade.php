@@ -22,7 +22,7 @@
 
 function getDados(modelId){
     var model= JSON.parse( $(modelId).val() );
-    var meses= ['',"Jan", "Fev", "Mar", "Abr", "Maio",'Jun', 'Jul', 'Jul', 'Ago', 'Set','Out','Nov','Dez'];
+    var meses= ['',"Jan", "Fev", "Mar", "Abr", "Maio",'Jun', 'Jul', 'Ago', 'Set','Out','Nov','Dez'];
     var values= Object.values(model);
     var keys= Object.keys(model);
     var labels=[];

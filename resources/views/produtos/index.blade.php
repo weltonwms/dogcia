@@ -17,22 +17,21 @@
 @section('content')
 
 <div class="tile tile-nomargin">
- <form action="{{route('produtos.index')}}"> 
-    <label class="text-primary">Ser Vivo</label>
-    {!!Form::select('vivo', [""=>"Todos",'1' => 'Sim', '0' => 'Não'],
+    <form action="{{route('produtos.index')}}">
+        <label class="text-primary">Ser Vivo</label>
+        {!!Form::select('vivo', [""=>"Todos",'1' => 'Sim', '0' => 'Não'],
         request('vivo'),
         ['onchange'=>"this.form.submit()"]
-     )!!}
-&nbsp;&nbsp;
-<label class="text-primary">Estoque</label>
-{!!Form::select('estoque', [''=>"Todos",'1'=>">=1",'0' => '=0'], 
-    request('estoque'),
-    ['onchange'=>"this.form.submit()"]
-)!!}
+        )!!}
+        &nbsp;&nbsp;
+        <label class="text-primary">Estoque</label>
+        {!!Form::select('estoque', [''=>"Todos",'1'=>">=1",'0' => 'Em Falta'],
+        request('estoque'),
+        ['onchange'=>"this.form.submit()"]
+        )!!}
 
-</form> 
+    </form>
 </div>
-
 
 @datatables
 <thead>

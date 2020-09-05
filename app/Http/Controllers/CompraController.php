@@ -15,8 +15,9 @@ class CompraController extends Controller
      */
     public function index()
     {
-        $compras = Compra::with('produto')->get();
-        return view("compras.index", compact('compras'));
+        $compras = Compra::getAllByFiltros();
+        $produtos= \App\Produto::getList();
+        return view("compras.index", compact('compras','produtos'));
     }
 
     /**
@@ -44,6 +45,8 @@ class CompraController extends Controller
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('compras.index');
+        elseif($request->input('fechar') == 2):
+            return redirect()->route('compras.create');
         endif;
         return redirect()->route('compras.edit',$compra->id);
     }
@@ -96,7 +99,10 @@ class CompraController extends Controller
         
         if ($request->input('fechar') == 1):
             return redirect()->route('compras.index');
+        elseif($request->input('fechar') == 2):
+                return redirect()->route('compras.create');
         endif;
+        
         return redirect()->route('compras.edit',$compra->id);
     }
 

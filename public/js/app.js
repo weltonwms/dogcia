@@ -41,7 +41,7 @@ function adminFormSubmit(event) {
     if(fechar){
        var exist= $("input[name=fechar]").length;
        if(!exist){
-        $(form).append("<input type='hidden' name='fechar' value='1' >");
+        $(form).append('<input type="hidden" name="fechar" value="'+btn.dataset.close+'" >');
        }
     }
     else{

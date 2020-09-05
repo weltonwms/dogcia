@@ -30,6 +30,20 @@ Compras'])
 
 @section('content')
 
+
+<div class="tile tile-nomargin">
+    <form action="{{route('compras.index')}}">
+        <label class="text-primary">Produto</label>
+        {!!Form::select('produto_id', $produtos,
+        request('produto_id'),
+        ['onchange'=>"this.form.submit()","class"=>"select2","placeholder"=>"-Selecione-"]
+        )!!}
+        &nbsp;&nbsp;
+       
+
+    </form>
+</div>
+
 @datatables
 <thead>
     <tr>

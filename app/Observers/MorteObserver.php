@@ -73,9 +73,14 @@ class MorteObserver
 
     private function updateMorte(Morte $morteBefore, Morte $morte)
     {
+        //análise das diferenças
+        $totalCustoDiferenca= $morteBefore->getTotal() - $morte->getTotal();
+        $qtdMorteDiferenca= $morteBefore->qtd  - $morte->qtd;
+
         $produto= $morte->produto; //produto da morte
-        //$produto->setCustoMedioOnUpdateMorte($morteBefore, $morte);
-        $produto->qtd_estoque-= ($morte->qtd-$morteBefore->qtd);//add diferença do atual pelo anterior
+        //Novo custo médio baseado na diferença
+        $produto->setCustoMedioOnEvent($totalCustoDiferenca, $qtdMorteDiferenca);
+        $produto->qtd_estoque+= $qtdMorteDiferenca;
         $produto->save();
     }
 

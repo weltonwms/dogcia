@@ -111,6 +111,27 @@
 
             </div>
 
+            <div class="box">
+                <div class="column"><span class="label">Vendedor:  </span> {{$venda->seller->nome}}</div>
+                <div class="column">
+                    <div class="box">
+                       <div class="column"><span class="label">Carteira: </span> {{$venda->isCarteiraNome()}}</div>
+                       <div class="column"><span class="label">Frete: </span> {{$venda->isFreteNome()}}</div>
+                    </div>
+                    
+                </div>
+               
+
+            </div>
+            <div class="box">
+                <div class="column"><span class="label">Status:  </span> {{$venda->statusNome()}}</div>
+                <div class="column"><span class="label">Forma Pagamento: </span> {{$venda->formaPagamentoNome()}}</div>
+                
+
+            </div>
+
+          
+
         </div>
 
 
@@ -130,7 +151,7 @@
                 <tr>
                    <td>{{++$key}}</td>
                    <td>{{$produto->pivot->qtd}}</td>
-                   <td>{{$produto->nome}} - {{$produto->descricao}}</td>
+                   <td>{{$produto->getNomeCompleto()}} - {{$produto->descricao}}</td>
                    <td>{{$produto->pivot->getValorFormatado()}}</td>
                    <td>{{$produto->pivot->getTotalFormatado()}}</td>
                 </tr>
@@ -141,7 +162,7 @@
                 <tr>
                     <td colspan="3"> </td>
                     <td><b>Total Geral</b></td>
-                    <td class="destaque"><b>{{$venda->getTotalGeralFormatado()}}</b></td>
+                    <td class="destaque"><b>{{Util::moneyToBr($venda->getTotalGeral(),true)}}</b></td>
                 </tr>
             </tfoot>
         </table>
