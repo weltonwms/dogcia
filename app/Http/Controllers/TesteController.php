@@ -30,6 +30,13 @@ class TesteController extends Controller
 
         $totalVendas=\DB::table('produto_venda')
         ->selectRaw(" produto_id, SUM(custo_medio*qtd) as totalValor, SUM(qtd) as totalQtd")
+        ->where("granel",0)
+        ->groupBy('produto_id')
+        ->get()
+        ->keyBy('produto_id');
+
+        $totalGranel=\DB::table('granos')
+        ->selectRaw(" produto_id, SUM(custo_medio) as totalValor, COUNT(*) as totalQtd")
         ->groupBy('produto_id')
         ->get()
         ->keyBy('produto_id');
@@ -43,6 +50,8 @@ class TesteController extends Controller
             $mortes_qtd=0;
             $vendas_valor=0;
             $vendas_qtd=0;
+            $granel_valor=0;
+            $granel_qtd=0;
             if(isset($totalCompras[$produto->id])){
                 $totalCompras_valor=$totalCompras[$produto->id]->totalValor;
                 $totalCompras_qtd=$totalCompras[$produto->id]->totalQtd;
@@ -55,8 +64,12 @@ class TesteController extends Controller
                 $vendas_valor=$totalVendas[$produto->id]->totalValor;
                 $vendas_qtd=$totalVendas[$produto->id]->totalQtd;
             }
-            $saidas_qtd=$mortes_qtd+$vendas_qtd;
-            $saidas_valor=$mortes_valor+$vendas_valor;
+            if(isset($totalGranel[$produto->id])){
+                $granel_valor=$totalGranel[$produto->id]->totalValor;
+                $granel_qtd=$totalGranel[$produto->id]->totalQtd;
+            }
+            $saidas_qtd=$mortes_qtd+$vendas_qtd+$granel_qtd;
+            $saidas_valor=$mortes_valor+$vendas_valor+$granel_valor;
             $valorEstoque=$produto->custo_medio*$produto->qtd_estoque;
             $teste1=$totalCompras_qtd==$produto->qtd_estoque+$saidas_qtd;
             // $teste2= bccomp($totalCompras_valor,$valorEstoque+$saidas_valor,1)==0?true:false;
@@ -70,6 +83,8 @@ class TesteController extends Controller
                 echo "<br>Mortes QTD: ".$mortes_qtd;
                 echo "<br>Vendas Valor: ".$vendas_valor;
                 echo "<br>Vendas QTD: ".$vendas_qtd;
+                echo "<br>Granel Total Custo: ".$granel_valor;
+                echo "<br>Granel QTD: ".$granel_qtd;
                 //echo "<br> round".round($valorEstoque);
                
                 

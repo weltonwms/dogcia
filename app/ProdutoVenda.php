@@ -9,6 +9,10 @@ class ProdutoVenda extends Pivot
 {
    // public $incrementing = true;
 
+   public function produto(){
+      return $this->belongsTo('App\Produto');
+   }
+
     public function getTotal(){
         return $this->valor_venda * $this->qtd;
     }

@@ -51,6 +51,7 @@
                 <th>Qtd</th>
                 <th>Discriminação</th>
                 <th>Custo Un</th>
+                <th>Custo Total</th>
                 <th>Preço Un</th>
                 <th>Total</th>
             </tr>
@@ -61,15 +62,16 @@
             <tr>
                 <td>{{++$key}}</td>
                 <td>{{$produto->pivot->qtd}}</td>
-                <td>{{$produto->getNomeCompleto()}} - {{$produto->descricao}}</td>
-                <td>{{Util::moneyToBr($produto->pivot->custo_medio,true)}}</td>
+                <td>{{ProdutoHelper::descricao($produto)}}</td>
+                <td>{{Util::moneyToBr(ProdutoHelper::custoMedio($produto),true)}}</td>
+                <td>{{Util::moneyToBr(ProdutoHelper::custoMedioTotal($produto),true)}}</td>
                 <td>{{$produto->pivot->getValorFormatado()}}</td>
                 <td>{{$produto->pivot->getTotalFormatado()}}</td>
             </tr>
             @endforeach
 
             <tr>
-                <td colspan="4"> </td>
+                <td colspan="5"> </td>
                 <td><b>Total Geral:</b></td>
                 <td class="destaque1">{{Util::moneyToBr($venda->getTotalGeral(),true)}}</td>
             </tr>

@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-//use App\Rent;
+
 use App\Produto;
 use App\ProdutoVenda;
 
@@ -14,56 +14,34 @@ use App\ProdutoVenda;
 class ProdutoHelper
 {
 
-    public static function getProdutosByRentsIds($rents_ids)
-    {
-        $produtos = Produto::whereHas('rents', function ($query) use ($rents_ids) {
-            $query->whereIn('rent_id', $rents_ids);
-        })->get();
-        return $produtos;
+    public static function descricao($produto){
+        
+       if($produto->pivot->granel){
+            $description=$produto->nome." (Granel ".$produto->getNomeGrandeza()." )";
+       }
+       else{
+            $description=$produto->getNomeCompleto();
+       }
+
+       if($produto->descricao){
+           $description.=" - ".$produto->descricao;
+       }
+
+        return $description;
+         
     }
 
-    public static function updateQtdDisponivelByProdutoId($produto_id)
-    {
-        $produto = Produto::find($produto_id);
-        $produto->updateQtdDisponivel();
+    public static function custoMedio($produto){
+        if($produto->pivot->granel){
+            return $produto->pivot->custo_medio/$produto->valor_grandeza;
+       }
+       return $produto->pivot->custo_medio;
     }
 
-    public static function updateQtdDisponivelByProdutos($produtos)
-    {
-        foreach ($produtos as $produto):
-            $produto->updateQtdDisponivel();
-        endforeach;
+    public static function custoMedioTotal($produto){
+        
+       return self::custoMedio($produto)*$produto->pivot->qtd;
     }
-
-    public static function getProdutosVendaByVendasIds($vendas_ids)
-    {
-        $produtosVenda = ProdutoVenda::whereIn('venda_id', $vendas_ids)->get();
-        return $produtosVenda;
-    }
-    /**
-     * Método que Repoõe as Qtd de estoque e Qtd Disponivel em um Produto ao ser
-     * apagado de vendas. Útil para operações em lote, pois em lote Eventos não
-     * são acionados
-     * @param array $produtosVenda. Array de \App\ProdutoVenda.
-     * @return int $affect. Nº de registros alterados.
-     */
-    public static function updateQtdProdutoOnDeleteVendas($produtosVenda)
-    {
-        $affect = \DB::transaction(function () use ($produtosVenda) {
-            $afect = 0;
-            foreach ($produtosVenda as $produto):
-                $afect += \DB::update('update produtos
-		                set qtd_estoque = qtd_estoque + ?
-		                where id = ?',
-                    [$produto->qtd, $produto->produto_id]);
-
-            endforeach;
-
-            return $afect;
-
-        });
-        return $affect;
-
-    }
+   
 
 }

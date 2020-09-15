@@ -10,6 +10,8 @@
 @toolbar
 <a class="btn btn-sm btn-success mr-1 mb-1" href="{{route('produtos.create')}}" > <i class="fa fa-plus-circle"></i>Novo</a>
 <button class="btn btn-sm btn-outline-secondary mr-1 mb-1" type="button" data-type="link" data-route="{{url('produtos/{id}/edit')}}" onclick="dataTableSubmit(event)"> <i class="fa fa-pencil"></i>Editar</button>
+<button class="btn btn-sm btn-outline-secondary mr-1 mb-1" type="button" data-type="link" data-route="{{url('produtos_granel/{id}')}}" onclick="dataTableSubmit(event)"> <i class="fa fa-balance-scale"></i>Granel</button>
+
 <button class="btn btn-sm btn-outline-danger mr-1 mb-1" type="button" data-type="delete" data-route="{{route('produtos_bath.destroy')}}" onclick="dataTableSubmit(event)"> <i class="fa fa-trash"></i>Excluir</button>
 @endtoolbar
 @endsection

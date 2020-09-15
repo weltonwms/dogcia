@@ -28,7 +28,10 @@ Route::group(['middleware' => 'auth'], function() {
     
     Route::resource('produtos', 'ProdutoController');
     Route::delete('/produtos_bath','ProdutoController@destroyBath' )->name('produtos_bath.destroy');
-    
+    Route::get('produtos_granel/{produto}','GranoController@edit')->name('produtos_granel.edit');
+    Route::post('produtos_granel','GranoController@store')->name('produtos_granel.store');
+    Route::delete('produtos_granel/{grano}','GranoController@destroy')->name('produtos_granel.destroy');
+
     Route::resource('compras', 'CompraController');
     Route::delete('/compras_bath','CompraController@destroyBath' )->name('compras_bath.destroy');
     

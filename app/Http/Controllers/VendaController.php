@@ -59,7 +59,7 @@ class VendaController extends Controller
         }
         catch(\Exception $e){
             \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
-            return redirect()->route('vendas.index');
+            return redirect()->back()->withInput();
         }
      
     }
@@ -170,7 +170,7 @@ class VendaController extends Controller
         foreach ($produtos as $produto):
             $product = $produto;
             unset($product['produto_id']);
-            $product['granel']=0; //temporario até implementar granel;
+            $product['granel']= (isset($produto['granel']) && $produto['granel']==1)?1:0;
             $dados[$produto['produto_id']] = $product;
         endforeach;
         $venda->produtos()->sync($dados);

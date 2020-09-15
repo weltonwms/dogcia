@@ -71,9 +71,15 @@ class Produto extends Model
         return $nome;
     }
 
-    public function getSerVivoTextoAttribute($price)
+    public function getSerVivoTextoAttribute()
     {
        return $this->ser_vivo?"Sim":"Nao";
+    }
+
+    public function getNomeGrandeza()
+    {
+        $grandezas=['','Kg','Lt','Un'];
+       return $grandezas[$this->grandeza];
     }
 
     public static function verifyAndDestroy(array $ids)
@@ -113,6 +119,13 @@ class Produto extends Model
         return $this->custo_medio*($this->margem/100 +1);
     }
 
+    public function getValorVendaGranel(){
+        if($this->grandeza==1||$this->grandeza==2){
+            return ($this->custo_medio/$this->valor_grandeza)*($this->margem/100 +1);
+        }
+        
+    }
+
     public static function getList()
     {
         return self::all()->mapWithKeys(function($produto){
@@ -146,6 +159,10 @@ class Produto extends Model
     {
         if($this->qtd_estoque < 0):
             throw new \Exception('Estoque inválido.');
+        endif;
+
+        if($this->granel < 0):
+            throw new \Exception('Granel inválido.');
         endif;
        
         parent::save($options);

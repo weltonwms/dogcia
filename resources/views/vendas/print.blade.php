@@ -151,7 +151,7 @@
                 <tr>
                    <td>{{++$key}}</td>
                    <td>{{$produto->pivot->qtd}}</td>
-                   <td>{{$produto->getNomeCompleto()}} - {{$produto->descricao}}</td>
+                   <td>{{ProdutoHelper::descricao($produto)}}</td>
                    <td>{{$produto->pivot->getValorFormatado()}}</td>
                    <td>{{$produto->pivot->getTotalFormatado()}}</td>
                 </tr>

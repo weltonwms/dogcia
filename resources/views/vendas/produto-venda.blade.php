@@ -46,7 +46,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="ModalFormProduto" tabindex="-1" role="dialog" aria-labelledby="TituloModalFormProduto" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog  modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="TituloModalFormProduto">Produto para Vender</h5>
@@ -65,9 +65,10 @@
                                 <option value="">--Selecione--</option>
                                 <?php foreach ($produtos as $produto): ?>
                                     <?php 
-                                    //calculos de  valor venda e nome_completo para js
+                                    //calculos de  atributos para js
                                     $produto->valor_venda=$produto->getValorVenda() ;
                                     $produto->nome_completo=$produto->getNomeCompleto();
+                                    $produto->valor_venda_granel=$produto->getValorVendaGranel() ;
                                     ?>
                                     <option value="<?php echo $produto->id ?>" data-obj="<?php echo base64_encode(json_encode($produto)) ?>">
                                         <?php echo $produto->getNomeCompleto() ?>
@@ -77,14 +78,29 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label for="formProduto_qtd_estoque" class="col-form-label">Qtd Estoque:</label>
+                            <label for="formProduto_qtd_estoque" class="col-form-label">
+                                Qtd Estoque <span class="info_grandeza"> <span class="valor_grandeza"></span>  </span>:
+                            </label>
                             <input class="form-control" type="text" id="formProduto_qtd_estoque" readonly>
                         </div>
 
+
+
+                        <div class="form-group col-md-3">
+                            <label for="formProduto_granel" class="col-form-label">Granel:</label>
+                            <input class="form-control" type="checkbox" id="formProduto_granel" value="1" style="width:33%" >
+                        </div>
                         
-                        <div class="form-group col-md-8">
+                        <div class="form-group col-md-5 bloco_cm">
                             <label for="formProduto_custo_medio" class="col-form-label">Custo Médio Un:</label>
                             <input class="form-control" type="text" id="formProduto_custo_medio" readonly>
+                        </div>
+
+                        <div class="form-group col-md-5 bloco_cm_granel">
+                            <label for="formProduto_custo_medio_granel" class="col-form-label">
+                                Custo Médio (por <span class="valor_grandeza"></span>):
+                            </label>
+                            <input class="form-control" type="text" id="formProduto_custo_medio_granel" readonly>
                         </div>
 
                         <div class="form-group col-md-4">
@@ -97,12 +113,16 @@
 
 
 
-                        <div class="form-group col-md-4">
-                            <label for="formProduto_qtd" class="col-form-label">Qtd:</label>
+                        <div class="form-group col-md-3">
+                            <label for="formProduto_qtd" class="col-form-label">
+                                Qtd <span class="info_grandeza"> <span class="valor_grandeza"></span>  </span>:
+                            </label>
                             <input type="number" min="0" class="form-control" id="formProduto_qtd">
                         </div>
-                        <div class="form-group col-md-4">
-                            <label for="formProduto_valor" class="col-form-label">Valor Un. Venda:</label>
+                        <div class="form-group col-md-5">
+                            <label for="formProduto_valor" class="col-form-label">
+                                Valor Un. Venda  <span class="info_grandeza"> <span class="valor_grandeza"></span>  </span>:
+                            </label>
                             <input type="text"  class="form-control money" id="formProduto_valor_venda">
                         </div>
                         <div class="form-group col-md-4">
