@@ -63,7 +63,7 @@
         <td>{{Util::moneyToBr($produto->custo_medio,true)}}</td>
         <td>{{$produto->margem}}</td>
         <td>{{Util::moneyToBr($produto->getValorVenda(),true)}}</td>
-        <td>{{$produto->granel}}</td>
+        <td>{{Util::floatBr($produto->granel)}}</td>
         <td>{{$produto->descricao}}</td>
         <td>{{$produto->id}}</td>
     </tr>

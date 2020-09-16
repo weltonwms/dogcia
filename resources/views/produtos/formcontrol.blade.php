@@ -7,7 +7,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Qtd Estoque</label>
-                <input readonly="readonly" type="text" class="form-control" value="{{$produto->qtd_estoque }}">
+                <input readonly="readonly" type="text" class="form-control" value="{{Util::floatBr($produto->qtd_estoque) }}">
                 </div>
             </div>
             <div class="col-md-3">
@@ -25,7 +25,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Granel</label>
-                    <input readonly="readonly" type="text" class="form-control" value="{{$produto->granel }}">
+                    <input readonly="readonly" type="text" class="form-control" value="{{Util::floatBr($produto->granel) }}">
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
 @push("scripts")
 <script>
     function changeMargem(){
-        var margem= ler_valor("#margem");
+        var margem= lerInputNumber("#margem");
         var custo_medio= ler_valor("#custo_medio");
         var valor_venda= custo_medio*(margem/100 +1);
         $("#valor_venda").val(valorFormatado(valor_venda));

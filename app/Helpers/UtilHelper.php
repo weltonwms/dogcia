@@ -83,4 +83,9 @@ class UtilHelper
         return $result;
     }
 
+    public static function floatBr($valorNumber){
+        return str_replace(".", ",", $valorNumber);
+     
+    }
+
 }

@@ -81,7 +81,7 @@
                             <label for="formProduto_qtd_estoque" class="col-form-label">
                                 Qtd Estoque <span class="info_grandeza"> <span class="valor_grandeza"></span>  </span>:
                             </label>
-                            <input class="form-control" type="text" id="formProduto_qtd_estoque" readonly>
+                            <input class="form-control" type="number" id="formProduto_qtd_estoque" readonly>
                         </div>
 
 
@@ -105,7 +105,7 @@
 
                         <div class="form-group col-md-4">
                             <label for="formProduto_margem" class="col-form-label">Margem %:</label>
-                            <input class="form-control" type="text" id="formProduto_margem" readonly>
+                            <input class="form-control" type="number" id="formProduto_margem" readonly>
                         </div>
 
 

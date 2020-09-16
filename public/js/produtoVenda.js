@@ -53,7 +53,7 @@ ProdutoVendaModel= (function Produtos() {
     function getTotalItem(index) {
         var item = items[index];
         if (item) {
-            var total = parseInt(item.qtd) * parseFloat(item.valor_venda);
+            var total = parseFloat(item.qtd) * parseFloat(item.valor_venda);
             return total.toFixed(2);
         }
     }
@@ -62,7 +62,7 @@ ProdutoVendaModel= (function Produtos() {
     function saveItem() {
         var id = $("#formProduto_id").val().trim();
         var produto_id = $("#formProduto_produto_id").val();
-        var qtd = $("#formProduto_qtd").val();
+        var qtd = lerInputNumber("#formProduto_qtd");
         var valor_venda = ler_valor("#formProduto_valor_venda");
         var custo_medio=ler_valor("#formProduto_custo_medio");
         var granel=$("#formProduto_granel").is(":checked")?1:0;
@@ -85,6 +85,7 @@ ProdutoVendaModel= (function Produtos() {
         TelaProduto.setIndex(index);
         TelaProduto.setCurrentProduto(item.produto_id);
         TelaProduto.setQtd(item.qtd);
+        
         //TelaProduto.setCustoMedio(item.custo_medio);
        // TelaProduto.setValorVenda(item.valor_venda);
         TelaProduto.writeForEdit();
@@ -109,7 +110,7 @@ ProdutoVendaModel= (function Produtos() {
             return "<tr>" +
                     "<td>" + (i + 1) + "</td>" +
                     "<td>" + getDescricao(item,product) + "</td>" +
-                    "<td>" + item.qtd + "</td>" +
+                    "<td>" + floatBr(item.qtd) + "</td>" +
                     "<td>" + valorFormatado(item.valor_venda) + "</td>" +
                     "<td>" + valorFormatado(getTotalItem(i)) + "</td>" +
                     '<td><a href="#" editProduct="' + i + '"> <i class="fa fa-edit"></i>  </a></td>' +
@@ -173,7 +174,7 @@ TelaProduto=(function(){
     }
 
     function setQtd(valor){
-        qtd=parseInt(valor) || 0;
+        qtd=parseFloat(valor) || 0;
     }
 
     function getQtd(){
@@ -214,8 +215,8 @@ TelaProduto=(function(){
         var qtdGravada= ItensGravados.getQtdGravadaByProduto(currentProduto.id); //qtdGravada Usada em Edição. Não desconta o que o próprio já tem gravado.
       
         var nomeAttr=isGranel?"granel":"qtd_estoque"; //se considera qtd a granel ou normal
-        var resultado= parseInt(currentProduto[nomeAttr]) - qtd + qtdGravada;
-                 
+        var resultado= parseFloat(currentProduto[nomeAttr]) - qtd + qtdGravada;
+        
         return resultado;
     }
 
@@ -281,6 +282,7 @@ TelaProduto=(function(){
         
         $("#formProduto_id").val(index);
         $("#formProduto_produto_id").val(getProdutoId());
+       
         $("#formProduto_qtd").val(qtd);
          isGranel=produtoVendaModel.granel==1;
         $("#formProduto_granel").prop("checked", isGranel);
@@ -377,7 +379,7 @@ ItensGravados=(function(){
         var obj=items.find(function(item){
             return item.produto_id==produto_id;
         });
-        return obj?parseInt(obj.qtd):0;
+        return obj?parseFloat(obj.qtd):0;
     }
 
    
@@ -397,7 +399,7 @@ function getObjProduct(id) {
 }
 
 function calculoTotal() {
-    var qtd = ler_valor("#formProduto_qtd");
+    var qtd = lerInputNumber("#formProduto_qtd");
     var valor_venda = ler_valor("#formProduto_valor_venda");
   
     if (qtd && valor_venda) {
@@ -421,7 +423,7 @@ function checkErrors(){
         return errors; // Não tem como prosseguir sem produto_id
     }
     //var produto = getObjProduct(produto_id);
-    if(!qtd || qtd < 1){
+    if(!qtd || qtd <= 0){
         errors.push("Quantidade Inválida");
     }
     if(!valor_venda){

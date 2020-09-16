@@ -34,19 +34,19 @@
                             <div class="form-group">
                                 <label for="">Total Granel Dispnibilizado</label>
                                
-                            <input readonly="readonly" type="text" class="form-control" value="{{$granelDisponibilizado." ".$produto->getNomeGrandeza() }}">
+                            <input readonly="readonly" type="text" class="form-control" value="{{Util::floatBr($granelDisponibilizado)." ".$produto->getNomeGrandeza() }}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Total Granel Vendido</label>
-                                <input readonly="readonly" id="custo_medio" type="text" class="form-control" value="{{$granelVendido." ".$produto->getNomeGrandeza()}}">
+                                <input readonly="readonly" id="custo_medio" type="text" class="form-control" value="{{Util::floatBr($granelVendido)." ".$produto->getNomeGrandeza()}}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Total Granel Atual Disponível</label>
-                                <input readonly="readonly" id="valor_venda" type="text" class="form-control" value="{{$produto->granel." ".$produto->getNomeGrandeza() }}">
+                                <input readonly="readonly" id="valor_venda" type="text" class="form-control" value="{{Util::floatBr($produto->granel)." ".$produto->getNomeGrandeza() }}">
                             </div>
                         </div>
                        
@@ -71,7 +71,7 @@
                     @foreach($granos as $grano)
                     <tr>
                         <td>{{Util::dateBr($grano->created_at,'d/m/Y H:i')}}</td>
-                        <td>{{$grano->valor." ".$produto->getNomeGrandeza()}}</td>
+                        <td>{{Util::floatBr($grano->valor)." ".$produto->getNomeGrandeza()}}</td>
                         <td>
                             <a class="deleteGranel" href="{{route('produtos_granel.destroy',$grano->id)}}"
                                 

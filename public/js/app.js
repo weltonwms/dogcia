@@ -112,6 +112,17 @@ function valorFormatado(valorNumber){
     return valor_formatado; //string formatada
 }
 
+function floatBr(valorNumber){
+    var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
+    if(isNaN(v)){
+        //mesmo assim se não form um número para aqui.
+        return 0;
+    }
+    //mesma coisa que valorFormatado, sem fixar casas.
+    var valor_formatado = v.toString().replace('.', ',');
+    return valor_formatado; //string formatada
+}
+
 function moneyBrToFloat(valor){
     if(valor){
         return parseFloat( valor.toString().replace('.', '').replace(',', '.') );
@@ -122,6 +133,16 @@ function moneyBrToFloat(valor){
 function ler_valor(campo) {
     return moneyBrToFloat($(campo).val());
   
+}
+
+function lerInputNumber(campo){
+    var val = $(campo).val();
+    if(!val && val!=='0'){
+        //alert("nr invalido!");
+        $(campo).val('0');
+        return false;	
+    }
+    return parseFloat(val);
 }
 
 

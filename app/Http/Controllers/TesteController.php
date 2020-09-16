@@ -109,6 +109,51 @@ class TesteController extends Controller
     }
 
 
+    public function teste2(){
+        
+         //entradas
+         $totalGranel=\DB::table('granos')
+         ->selectRaw(" produto_id, SUM(valor) as totalValor, COUNT(*) as totalQtd")
+         ->groupBy('produto_id')
+         ->get()
+         ->keyBy('produto_id');
+
+         //saida
+         $totalVendas=\DB::table('produto_venda')
+         ->selectRaw(" produto_id,  SUM(qtd) as totalQtd")
+         ->where("granel",1)
+         ->groupBy('produto_id')
+         ->get()
+         ->keyBy('produto_id');
+
+        //dd($totalGranel[53]->totalValor);
+
+         $produtos=\App\Produto::whereIn('id',$totalGranel->keys())->get();
+         foreach($produtos as $produto):
+            $estoque_qtd=$produto->granel;
+            $granel_disponibilizado=$totalGranel[$produto->id]->totalValor;
+            $granel_vendido=0;
+
+            if(isset($totalVendas[$produto->id])){
+                $granel_vendido=$totalVendas[$produto->id]->totalQtd;
+            }
+            //total Disponibilizado(entrada)==estoqueGranel+saida(venda)
+            $teste1= $granel_disponibilizado===$estoque_qtd+$granel_vendido;
+
+            echo "<h3>Produto: {$produto->nome} Cód: {$produto->id} </h3>";
+            echo "<br>Total Granel disponibilizado: ".$granel_disponibilizado;
+            echo "<br>Estoque de Granel: ".$estoque_qtd;
+            echo "<br>Granel Vendido: ".$granel_vendido;
+
+            echo "<h5>Validando Estoque</h5>";
+            echo "Entrada==Estoque+Saidas: ".boolStr($teste1);
+                
+            
+        
+         endforeach;
+    }
+
+
    
 }
 

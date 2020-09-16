@@ -46,6 +46,7 @@ class ProdutoVendaObserver
         $produto=\App\Produto::find($venda->produto_id);
         if($venda->granel==1){
             $qtdVendaDiferenca= self::$vendaBeforeSave->qtd  - $venda->qtd;
+           
             $produto->granel+= $qtdVendaDiferenca;
         }
         else{
