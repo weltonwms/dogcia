@@ -23,20 +23,26 @@ Produtos Vendidos'])
 
 
 @section('content')
-<?php
-use App\Helpers\UtilHelper;
-?>
+
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
 
             {!! Form::open(['route'=>'relatorio.produtoVenda','id'=>'form_pesquisa'])!!}
             <div class="row">
-                <div class="col-md-3">
-                    {{ Form::bsDate('data_venda1', request('data_venda1'),['label'=>'Data Venda >=']) }}
+                <div class="col-md-2" >
+                    {{ Form::bsDate('data_venda1', request('data_venda1'),['label'=>'Data Venda >=', 'class'=>'form-control-sm']) }}
                 </div>
-                <div class="col-md-3">
-                    {{ Form::bsDate('data_venda2',request('data_venda2'),['label'=>'Data Venda <=']) }}
+
+                <div class="col-md-2" >
+                    {{ Form::bsDate('data_venda2', request('data_venda2'),['label'=>"Data Venda <=", 'class'=>'form-control-sm']) }}
+                </div>
+
+                <div class="col-md-2">
+                    {{ Form::bsSelect('status', [''=>"Todos",'1'=>"Pago",'2' => 'Não Pago'],
+                    request('status') , ['class'=>'form-control-sm']
+                    ) }}
+                   
                 </div>
 
 
@@ -55,7 +61,46 @@ use App\Helpers\UtilHelper;
                 {{-- <button type="submit">Env</button> --}}
 
             </div>
-            </form>
+
+            <div class="row">
+               
+
+                
+
+                <div class="col-md-2">
+                    {{ Form::bsSelect('frete', [''=>"Todos",'1'=>"Sim",'0' => 'Não'],
+                    request('frete'),  ['class'=>'form-control-sm']
+                    ) }}
+                </div>
+
+                <div class="col-md-2">
+                    {{ Form::bsSelect('carteira', [''=>"Todos",'1'=>"Sim",'0' => 'Não'],
+                    request('carteira') ,  ['class'=>'form-control-sm']
+                    ) }}
+                 </div>
+
+                 <div class="col-md-2">
+                    {{ Form::bsSelect('forma_pagamento', [''=>"Todos",'1'=>"Dinheiro",'2' => 'Cartão Crédito','3'=>'Cartão Débito'],
+                    request('forma_pagamento') , ['class'=>'form-control-sm']
+                    ) }}
+                   
+                </div>
+
+                 <div class="col-md-3">
+                    {{ Form::bsSelect('granel', [''=>"Todos",'1'=>"Sim",'0' => 'Não'],
+                    request('granel'), ['class'=>'form-control-sm']
+                    ) }}
+                </div>
+
+                 
+
+                <div class="col-md-3">
+                    {{ Form::bsSelect('seller_id[]',$sellers,request('seller_id'),['label'=>"Vendedor(es)", 
+                    'class'=>'select2','multiple'=>'multiple']) }}
+                </div>
+
+            </div>
+            {!! Form::close() !!}
 
 
 
@@ -64,9 +109,13 @@ use App\Helpers\UtilHelper;
                     @if($relatorio->items)
                     <span class="text-primary"><b>Mostrando {{$relatorio->items->count()}} Registro(s)</b></span>
                     @endif
-                    <button class="btn btn-outline-success pull-right"> Total Geral:
-                        {{UtilHelper::moneyToBr($relatorio->total)}}</button>
+                    <button class="btn btn-outline-success  mr-2 pull-right"> Total Lucro:
+                        {{Util::moneyToBr($relatorio->totalLucro)}}</button>
+                    <button class="btn btn-outline-success  mr-2 pull-right"> Total Venda:
+                        {{Util::moneyToBr($relatorio->total)}}</button>
                     <button class="btn btn-outline-info mr-2 pull-right"> Total Qtd: {{$relatorio->totalQtd}}</button>
+                    <button class="btn btn-outline-info mr-2 pull-right"> Total Qtd Granel: {{Util::floatBr($relatorio->totalGranel)}}</button>
+
                 </div>
             </div>
 
@@ -76,12 +125,23 @@ use App\Helpers\UtilHelper;
                         <th>Cód Venda</th>
                         <th>Cliente</th>
                         <th>Data Venda</th>
-
+                        <th>Vendedor</th>
+                        <th>Frete</th>
+                        <th>Carteira</th>
+                        <th>Status</th>
+                        <th>Forma Pagamento</th>
                         <th>Cód Produto</th>
                         <th>Nome Produto</th>
                         <th>Qtd</th>
-                        <th>Valor Venda</th>
-                        <th>Total</th>
+                       
+                       
+
+                       
+                        <th>Custo Un</th>
+                        <th>Valor Un Venda</th>
+                        <th>Total Custo</th>
+                        <th>Total Venda</th>
+                        <th>Lucro</th>
 
                     </thead>
 
@@ -90,13 +150,25 @@ use App\Helpers\UtilHelper;
                         <tr>
                             <td>{{$item->venda_id}}</td>
                             <td>{{$item->cliente_nome}}</td>
-                            <td>{{UtilHelper::dateBr($item->data_venda)}}</td>
+                            <td>{{Util::dateBr($item->data_venda)}}</td>
+                            <td>{{$item->seller_nome}}</td>
+                            <td>{{$item->frete}}</td>
+                            <td>{{$item->carteira}}</td>
+                            <td>{{$item->status}}</td>
+                            <td>{{$item->forma_pagamento}}</td>
 
                             <td>{{$item->produto_id}}</td>
                             <td>{{$item->produto_nome}}</td>
-                            <td>{{$item->qtd}}</td>
-                            <td>{{UtilHelper::moneyToBr($item->valor_venda)}}</td>
-                            <td>{{UtilHelper::moneyToBr($item->total)}}</td>
+                            <td>{{Util::floatBr($item->qtd)}}</td>
+                           
+                            
+                            
+                            <td>{{Util::moneyToBr($item->custo_unitario)}}</td>
+                            <td>{{Util::moneyToBr($item->valor_venda)}}</td>
+                            <td>{{Util::moneyToBr($item->total_custo)}}</td>
+                            <td>{{Util::moneyToBr($item->total_venda)}}</td>
+                            <td>{{Util::moneyToBr($item->lucro)}}</td>
+
                         </tr>
                         @endforeach
                     </tbody>

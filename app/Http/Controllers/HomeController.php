@@ -28,9 +28,11 @@ class HomeController extends Controller
         $dados=[
             "cards"=>Dashboard::getCards(),
             "vendasMensais"=>json_encode(Dashboard::vendasMensais() ),
+            "lucrosMensais"=>json_encode(Dashboard::lucrosMensais() ),
             
         ];
-       
+
+              
         return view('dashboard.home',$dados);
     }
 }

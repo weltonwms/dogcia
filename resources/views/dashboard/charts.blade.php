@@ -1,5 +1,5 @@
 <input type="hidden" value="{{$vendasMensais}}" id="vendasMensais" />
-
+<input type="hidden" value="{{$lucrosMensais}}" id="lucrosMensais" />
 
 <div class="row">
     <div class="col-md-6">
@@ -7,6 +7,15 @@
         <h3 class="tile-title"><i class="fa fa-cart-plus"></i> Vendas Mensais</h3>
         <div class="embed-responsive embed-responsive-16by9">
           <canvas class="embed-responsive-item" id="lineChartVendas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="tile">
+        <h3 class="tile-title"><i class="fa fa-usd"></i> Lucros Mensais</h3>
+        <div class="embed-responsive embed-responsive-16by9">
+          <canvas class="embed-responsive-item" id="lineChartLucros"></canvas>
         </div>
       </div>
     </div>
@@ -49,16 +58,26 @@ function getDados(modelId){
                 data: values
             }
         ]
+        
+
     };
     var ctxl = $(targetId).get(0).getContext("2d");
     var lineChart = new Chart(ctxl).Line(data);
 
   }
 
+  function toFloatBr(number){
+   
+    return parseFloat(number).toFixed(2);
+  }
+
 
   (function start(){
     var dados= getDados("#vendasMensais");
-    writeChart(dados.labels,dados.values, "#lineChartVendas");
+    var dadosLucro= getDados("#lucrosMensais");
+    
+    writeChart(dados.labels,dados.values.map(toFloatBr), "#lineChartVendas");
+    writeChart(dadosLucro.labels,dadosLucro.values.map(toFloatBr), "#lineChartLucros");
    
   })();
 

@@ -32,24 +32,67 @@ use App\Helpers\UtilHelper;
 
             {!! Form::open(['route'=>'relatorio.vendas','id'=>'form_pesquisa'])!!}
             <div class="row">
-                <div class="col-md-4">
-                    {{ Form::bsDate('data_venda1', request('data_venda1'),['label'=>'Data Venda >=']) }}
-                </div>
-                <div class="col-md-4">
-                    {{ Form::bsDate('data_venda2',request('data_venda2'),['label'=>'Data Venda <=']) }}
+                <div class="col-md-2" >
+                    {{ Form::bsDate('data_venda1', request('data_venda1'),['label'=>'Data Venda >=', 'class'=>'form-control-sm']) }}
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-2" >
+                    {{ Form::bsDate('data_venda2', request('data_venda2'),['label'=>"Data Venda <=", 'class'=>'form-control-sm']) }}
+                </div>
+
+                <div class="col-md-2">
+                    {{ Form::bsSelect('status', [''=>"Todos",'1'=>"Pago",'2' => 'Não Pago'],
+                    request('status') , ['class'=>'form-control-sm']
+                    ) }}
+                   
+                </div>
+
+
+
+               
+
+                <div class="col-md-3">
                     {{ Form::bsSelect('cliente_id[]',$clientes,request('cliente_id'),['label'=>"Cliente(s)", 
                     'class'=>'select2','multiple'=>'multiple']) }}
+                </div>
 
+                <div class="col-md-3">
+                    {{ Form::bsSelect('seller_id[]',$sellers,request('seller_id'),['label'=>"Vendedor(es)", 
+                    'class'=>'select2','multiple'=>'multiple']) }}
                 </div>
 
 
                 {{-- <button type="submit">Env</button> --}}
 
             </div>
-            </form>
+
+            <div class="row">
+               
+
+                
+
+                <div class="col-md-2">
+                    {{ Form::bsSelect('frete', [''=>"Todos",'1'=>"Sim",'0' => 'Não'],
+                    request('frete'),  ['class'=>'form-control-sm']
+                    ) }}
+                </div>
+
+                <div class="col-md-2">
+                    {{ Form::bsSelect('carteira', [''=>"Todos",'1'=>"Sim",'0' => 'Não'],
+                    request('carteira') ,  ['class'=>'form-control-sm']
+                    ) }}
+                 </div>
+
+                 <div class="col-md-2">
+                    {{ Form::bsSelect('forma_pagamento', [''=>"Todos",'1'=>"Dinheiro",'2' => 'Cartão Crédito','3'=>'Cartão Débito'],
+                    request('forma_pagamento') , ['class'=>'form-control-sm']
+                    ) }}
+                   
+                </div>
+
+
+            </div>
+            {!! Form::close() !!}
 
 
 
@@ -59,8 +102,15 @@ use App\Helpers\UtilHelper;
                     <span class="text-primary"><b>Mostrando {{$relatorio->items->count()}} Registro(s)</b></span>
                     @endif
 
-                    <button class="btn btn-outline-success pull-right"> Total Venda:
-                        {{UtilHelper::moneyToBr($relatorio->total_venda)}}</button>
+                    <button class="btn btn-outline-success pull-right"> Total Lucro:
+                        {{UtilHelper::moneyToBr($relatorio->totalLucro)}}
+                    </button>
+                    <button class="btn btn-outline-success pull-right mr-2"> Total Venda:
+                        {{UtilHelper::moneyToBr($relatorio->total_venda)}}
+                    </button>
+                    <button class="btn btn-outline-danger pull-right mr-2"> Total Custo:
+                        {{UtilHelper::moneyToBr($relatorio->total_custo)}}
+                    </button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -69,7 +119,14 @@ use App\Helpers\UtilHelper;
                         <th>Cód Venda</th>
                         <th>Cliente</th>
                         <th>Data Venda</th>
-                        <th>Total</th>
+                        <th>Vendedor</th>
+                        <th>Frete</th>
+                        <th>Carteira</th>
+                        <th>Status</th>
+                        <th>Forma Pagamento</th>
+                        <th>Total Custo</th>
+                        <th>Total Venda</th>
+                        <th>Lucro</th>
 
                     </thead>
 
@@ -77,9 +134,18 @@ use App\Helpers\UtilHelper;
                         @foreach($relatorio->items as $item)
                         <tr>
                             <td>{{$item->id}}</td>
-                            <td>{{$item->nome}}</td>
+                            <td>{{$item->cliente_nome}}</td>
                             <td>{{$item->data_venda}}</td>
-                            <td>{{UtilHelper::moneyToBr($item->total)}}</td>
+                            
+                            <td>{{$item->seller_nome}}</td>
+                            <td>{{$item->frete}}</td>
+                            <td>{{$item->carteira}}</td>
+                            <td>{{$item->status}}</td>
+                            <td>{{$item->forma_pagamento}}</td>
+
+                            <td>{{UtilHelper::moneyToBr($item->total_custo)}}</td>
+                            <td>{{UtilHelper::moneyToBr($item->total_venda)}}</td>
+                            <td>{{UtilHelper::moneyToBr($item->lucro)}}</td>
                         </tr>
                         @endforeach
                     </tbody>

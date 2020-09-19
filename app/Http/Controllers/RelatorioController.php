@@ -39,6 +39,7 @@ class RelatorioController extends Controller
         $result = $request->isMethod('post') ? $relatorio->getRelatorio() : $relatorio;
         $dados = [
             'clientes' => \App\Cliente::pluck('nome', 'id'),
+            'sellers' => \App\Seller::pluck('nome', 'id'),
             'relatorio' => $result,
         ];
         return view("relatorios.vendas", $dados);
@@ -51,7 +52,8 @@ class RelatorioController extends Controller
         $result = $request->isMethod('post') ? $relatorio->getRelatorio() : $relatorio;
         $dados = [
             'clientes' => \App\Cliente::pluck('nome', 'id'),
-            'produtos' => \App\Produto::pluck('nome', 'id'),
+            'sellers' => \App\Seller::pluck('nome', 'id'),
+            'produtos' => \App\Produto::getList(),
             'relatorio' => $result,
         ];
         return view("relatorios.produto-venda", $dados);
