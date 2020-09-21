@@ -58,12 +58,26 @@
             <i class="icon fa fa-circle-o"></i> Vendas
           </a>
         </li>
+
+        <li>
+          <a class="treeview-item {{Request::segment(2)=='produtos'?'active':null}}" href="{{route('relatorio.produtos')}}">
+            <i class="icon fa fa-circle-o"></i> Produtos
+          </a>
+        </li>
+
         <li>
           <a class="treeview-item {{Request::segment(2)=='produtoVenda'?'active':null}}"
             href="{{route('relatorio.produtoVenda')}}">
             <i class="icon fa fa-circle-o"></i> Produtos Vendidos
           </a>
         </li>
+
+        <li>
+          <a class="treeview-item {{Request::segment(2)=='sellers'?'active':null}}" href="{{route('relatorio.sellers')}}">
+            <i class="icon fa fa-circle-o"></i> Vendedores
+          </a>
+        </li>
+
       </ul>
     </li>
 

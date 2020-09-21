@@ -51,6 +51,9 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::match(['get', 'post'],"relatorio/vendas",'RelatorioController@vendas')->name('relatorio.vendas');
     Route::match(['get', 'post'],"relatorio/produtoVenda",'RelatorioController@produtoVenda')->name('relatorio.produtoVenda');
+    Route::match(['get', 'post'],"relatorio/produtos",'RelatorioController@produtos')->name('relatorio.produtos');
+    Route::match(['get', 'post'],"relatorio/sellers",'RelatorioController@sellers')->name('relatorio.sellers');
+
 
     Route::get('teste1','TesteController@teste1');
     Route::get('teste2','TesteController@teste2');
