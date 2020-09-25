@@ -18,8 +18,8 @@
     </section>
     <section class="login-content">
       <div class="logo">
-        <h1>Dog & Cia</h1>
-      {{-- <img src="{{asset('img/logo_branco.png')}}" alt="logo NinaCazen"> --}}
+        {{-- <h1>Dog & Cia</h1> --}}
+      <img src="{{asset('img/logo_branco.png')}}" alt="logo Dog e Cia">
       </div>
       <div class="login-box">
         <form method="POST" class="login-form" action="{{ route('login') }}">

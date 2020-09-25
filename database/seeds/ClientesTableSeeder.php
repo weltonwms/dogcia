@@ -11,6 +11,11 @@ class ClientesTableSeeder extends Seeder
      */
     public function run()
     {
+        \App\Cliente::create([
+            'nome'=>"Cliente Balcão",
+            'telefone'=>"(00) 0000-0000"
+            
+        ]);
         factory(App\Cliente::class,50)->create();
     }
 }

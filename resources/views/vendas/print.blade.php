@@ -79,7 +79,7 @@
     <section class="sheet padding-10mm">
         <div class="box">
             <div class="column f4">
-                <img src="{{ asset('img/logo_impressao.png') }}" alt="logo">
+                <img style="margin-top:-10px" src="{{ asset('img/logo_impressao.png') }}" alt="logo">
             </div>
 
             <div class="column text-right">
