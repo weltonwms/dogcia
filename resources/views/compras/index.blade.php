@@ -39,6 +39,9 @@ Compras'])
         ['onchange'=>"this.form.submit()","class"=>"select2","placeholder"=>"-Selecione-"]
         )!!}
         &nbsp;&nbsp;
+        
+        <label class="text-primary">Custo Compras</label>
+       <button type="button" class="btn btn-outline-info btn-sm">R$ <span id="custo_compras">0,00</span></button>
        
 
     </form>
@@ -89,9 +92,34 @@ Compras'])
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:7}); //instanciando dataTable e informando a coluna do id
+    var tabela=Tabela.getInstance({colId:7}); //instanciando dataTable e informando a coluna do id
+    writeCustoCompras();
+    tabela.on( 'search.dt', function () {
+        writeCustoCompras();
+    } );
 });
    //fim start Datatable//
+
+   function getTotalCompras(){
+    function filtroCelula(celula){
+        return parseFloat(celula.replace("R$", "").trim().replace(".","").replace(",","."));
+    }
+    var tabela= Tabela.getInstance();
+    var total=0;
+    tabela.rows({filter:'applied'}).data().each(function(row){
+        var qtd=filtroCelula(row[4]);
+        var custoUn=filtroCelula(row[5]);
+        total+=(custoUn*qtd);
+        
+    });
+    return total;
+  }
+
+  function writeCustoCompras(){
+        var total= getTotalCompras();
+        $("#custo_compras").html(valorFormatado(total));
+
+  }
 
  
 

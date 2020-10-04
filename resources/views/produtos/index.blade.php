@@ -31,6 +31,9 @@
         request('estoque'),
         ['onchange'=>"this.form.submit()"]
         )!!}
+         &nbsp;&nbsp;
+         <label class="text-primary">Custo Estoque</label>
+        <button type="button" class="btn btn-outline-info btn-sm">R$ <span id="custo_estoque">0,00</span></button>
 
     </form>
 </div>
@@ -80,9 +83,35 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:9}); //instanciando dataTable e informando a coluna do id
+    var tabela= Tabela.getInstance({colId:9}); //instanciando dataTable e informando a coluna do id
+    writeCustoEstoque();
+    tabela.on( 'search.dt', function () {
+        writeCustoEstoque();
+    } );
+
 });
-   //fim start Datatable//
+  //fim start Datatable//
+
+  function getTotalCusto(){
+    function filtroCelula(celula){
+        return parseFloat(celula.replace("R$", "").trim().replace(".","").replace(",","."));
+    }
+    var tabela= Tabela.getInstance();
+    var total=0;
+    tabela.rows({filter:'applied'}).data().each(function(row){
+        var custo=filtroCelula(row[4]);
+        var qtd=filtroCelula(row[3]);
+        total+=(custo*qtd);
+        
+    });
+    return total;
+  }
+
+  function writeCustoEstoque(){
+        var total= getTotalCusto();
+        $("#custo_estoque").html(valorFormatado(total));
+
+  }
 
 
 
