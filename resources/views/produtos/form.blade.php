@@ -1,5 +1,6 @@
 <?php
 $grandezas=[''=>"-Selecione-",1=>"Kilo",2=>"Litro",3=>"Unitário"];
+$valorDescMaximo=isset($produto)?$produto->desconto_maximo:0;
 
 ?>
 
@@ -43,6 +44,14 @@ $grandezas=[''=>"-Selecione-",1=>"Kilo",2=>"Litro",3=>"Unitário"];
 
     <div class="col-md-6">
         {{ Form::bsNumber('margem',null,['label'=>"Margem % *"]) }}
+    </div>
+
+    <div class="col-md-6">
+        {{ Form::bsText('valor_venda',null, ['label'=>"Valor Un Venda *", 'class'=>"money"]) }}
+    </div>
+
+    <div class="col-md-6">
+        {{ Form::bsNumber('desconto_maximo',$valorDescMaximo,['label'=>"Desconto Máximo Permitido % *",'min'=>'0']) }}
     </div>
 
   

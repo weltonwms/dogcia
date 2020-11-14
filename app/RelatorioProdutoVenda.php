@@ -17,21 +17,23 @@ class RelatorioProdutoVenda extends Model
    
     public function getRelatorio()
     {
+        $txDesconto="(1 - (produto_venda.desconto/100)) ";
         $query = ProdutoVenda::join('vendas', 'vendas.id', '=', 'produto_venda.venda_id')
                     ->join('produtos as p', 'p.id', '=', 'produto_venda.produto_id')
                     ->join('clientes', 'clientes.id', '=', 'vendas.cliente_id')
                     ->join('sellers as s', 's.id', '=', 'vendas.seller_id')
-                     ->selectRaw('produto_venda.*, p.nome as produto_nome,
+                     ->selectRaw("produto_venda.*, p.nome as produto_nome,
+                     produto_venda.valor_venda*$txDesconto as valor_venda_final,
                      p.grandeza,p.valor_grandeza,
                      IF(produto_venda.granel=0,produto_venda.custo_medio,(produto_venda.custo_medio/p.valor_grandeza)) as custo_unitario,
                      IF(produto_venda.granel=0,produto_venda.custo_medio*qtd,(produto_venda.custo_medio/p.valor_grandeza)*qtd) as total_custo,
-                     (produto_venda.valor_venda * qtd) as total_venda,
+                     (produto_venda.valor_venda * qtd *$txDesconto) as total_venda,
                      (SELECT total_venda - total_custo) as lucro,
                       clientes.nome as cliente_nome, 
                       s.nome as seller_nome,
                       vendas.data_venda, vendas.carteira, vendas.frete, vendas.forma_pagamento, vendas.status
                       
-                      ');
+                      ");
                     
         if (request('cliente_id')):
             $query->whereIn('cliente_id', request('cliente_id'));

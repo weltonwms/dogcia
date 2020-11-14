@@ -19,11 +19,13 @@ class RelatorioVenda extends Model
         $sql="vendas.id, vendas.cliente_id, 
         vendas.data_venda, vendas.carteira, vendas.frete, vendas.forma_pagamento, vendas.status
         ";
+        $txDesconto="(1 - (produto_venda.desconto/100)) ";
         $query = Venda::join('produto_venda', 'vendas.id', '=', 'produto_venda.venda_id')
                     ->join('clientes as c', 'c.id', '=', 'vendas.cliente_id')
                     ->join('produtos as p', 'p.id', '=', 'produto_venda.produto_id')
                     ->join('sellers as s', 's.id', '=', 'vendas.seller_id')
-                     ->selectRaw("s.nome as seller_nome, c.nome as cliente_nome, $sql, sum((produto_venda.valor_venda * qtd)) as total_venda,
+                     ->selectRaw("s.nome as seller_nome, c.nome as cliente_nome, $sql,
+                      sum((produto_venda.valor_venda * qtd * $txDesconto)) as total_venda,
                     SUM(IF(produto_venda.granel=0,produto_venda.custo_medio*qtd,(produto_venda.custo_medio/p.valor_grandeza)*qtd)) as total_custo
                     ");
                     
@@ -63,7 +65,7 @@ class RelatorioVenda extends Model
 
         $this->items=$query->groupByRaw("$sql, s.nome, c.nome")
         ->get();
-
+        
         $this->tratarItems($this->items);
         
         return $this;

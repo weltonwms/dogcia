@@ -8,7 +8,7 @@ use App\Morte;
 
 class Produto extends Model
 {
-    protected $fillable = ['nome', 'descricao', 'ser_vivo', 'grandeza', 'valor_grandeza','margem'];
+    protected $fillable = ['nome', 'descricao', 'ser_vivo', 'grandeza', 'valor_grandeza','margem','valor_venda','desconto_maximo'];
 
     public function vendas()
     {
@@ -114,14 +114,15 @@ class Produto extends Model
         endif;
     }
 
-    public function getValorVenda(){
+    public function getValorVendaMargem(){
         
         return $this->custo_medio*($this->margem/100 +1);
     }
 
     public function getValorVendaGranel(){
         if($this->grandeza==1||$this->grandeza==2){
-            return ($this->custo_medio/$this->valor_grandeza)*($this->margem/100 +1);
+            //return ($this->custo_medio/$this->valor_grandeza)*($this->margem/100 +1);
+            return $this->valor_venda/$this->valor_grandeza;
         }
         
     }

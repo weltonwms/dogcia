@@ -164,7 +164,7 @@ Produtos Vendidos'])
                             
                             
                             <td>{{Util::moneyToBr($item->custo_unitario)}}</td>
-                            <td>{{Util::moneyToBr($item->valor_venda)}}</td>
+                            <td>{{Util::moneyToBr($item->valor_venda_final)}}</td>
                             <td>{{Util::moneyToBr($item->total_custo)}}</td>
                             <td>{{Util::moneyToBr($item->total_venda)}}</td>
                             <td>{{Util::moneyToBr($item->lucro)}}</td>

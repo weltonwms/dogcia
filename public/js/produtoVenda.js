@@ -53,8 +53,18 @@ ProdutoVendaModel= (function Produtos() {
     function getTotalItem(index) {
         var item = items[index];
         if (item) {
-            var total = parseFloat(item.qtd) * parseFloat(item.valor_venda);
+            var txDesc= 1 - item.desconto/100;
+            var total = parseFloat(item.qtd) * parseFloat(item.valor_venda * txDesc);
             return total.toFixed(2);
+        }
+    }
+
+    function getValorFinal(index){
+        var item = items[index];
+        if (item) {
+            var txDesc= 1 - item.desconto/100;
+            var valorFinal = parseFloat(item.valor_venda * txDesc);
+            return valorFinal.toFixed(2);
         }
     }
    
@@ -63,11 +73,12 @@ ProdutoVendaModel= (function Produtos() {
         var id = $("#formProduto_id").val().trim();
         var produto_id = $("#formProduto_produto_id").val();
         var qtd = lerInputNumber("#formProduto_qtd");
+        var desconto = lerInputNumber("#formProduto_desconto");
         var valor_venda = ler_valor("#formProduto_valor_venda");
         var custo_medio=ler_valor("#formProduto_custo_medio");
         var granel=$("#formProduto_granel").is(":checked")?1:0;
         
-        var item = {produto_id: produto_id, qtd: qtd, valor_venda: valor_venda,custo_medio:custo_medio, granel:granel};
+        var item = {produto_id: produto_id, qtd: qtd, valor_venda: valor_venda,custo_medio:custo_medio, granel:granel,desconto:desconto};
         if (id) {
             updateItem(item, id);
             $('#ModalFormProduto').modal('hide');
@@ -111,7 +122,7 @@ ProdutoVendaModel= (function Produtos() {
                     "<td>" + (i + 1) + "</td>" +
                     "<td>" + getDescricao(item,product) + "</td>" +
                     "<td>" + floatBr(item.qtd) + "</td>" +
-                    "<td>" + valorFormatado(item.valor_venda) + "</td>" +
+                    "<td>" + valorFormatado(getValorFinal(i)) + "</td>" +
                     "<td>" + valorFormatado(getTotalItem(i)) + "</td>" +
                     '<td><a href="#" editProduct="' + i + '"> <i class="fa fa-edit"></i>  </a></td>' +
                     '<td><a href="#" deleteProduct="' + i + '"> <i class="fa fa-trash text-danger"></i>  </a></td>' +
@@ -150,15 +161,17 @@ TelaProduto=(function(){
     var qtd=0;
     var index; //indice do item vendido já salvo na Lista. Usado para Edição
     var isGranel=false;
+    var desconto=0;
     //atributos abaixo não são usados devido a suposições de valores de currentProduto ou produtoVendaModel
     var valor_venda; 
     var margem;
     var custo_medio;
+    var desconto_maximo=0;
    
     function inicialize(){
         //Espécie de Construtor do Modal. Colocar ações pararelas ao mostrar tela.
         showBlocoCm();
-        
+        showBlocoDesconto();
     }
 
    
@@ -167,6 +180,8 @@ TelaProduto=(function(){
         currentProduto=produto_id?getObjProduct(produto_id):null;
         //ao mudar o currentProduto, setar o model relacionado a esse produto se houver
         produtoVendaModel=ProdutoVendaModel.getProdutoVenda(produto_id);
+        //ao mudar o currentProduto atualizar o campo desconto com maxímo permitido
+        updateDescontoMaximo();
     }
 
     function getCurrentProduto(){
@@ -226,6 +241,28 @@ TelaProduto=(function(){
         index=valor;
     }
 
+    function updateDescontoMaximo(){
+        $(".MensagemDescontoMaximo").html('');
+        $("#formProduto_desconto").attr("max",getDescontoMaximo());
+        showBlocoDesconto();
+    }
+
+    function getDescontoMaximo(){
+        var descMax=0;
+        if(currentProduto){
+            descMax=currentProduto.desconto_maximo;
+        }
+        return descMax;
+    }
+
+    function showMessageDescontoMaximo(){
+        $(".MensagemDescontoMaximo").html('');
+        if(desconto > getDescontoMaximo()){
+            $(".MensagemDescontoMaximo").html('O desconto Máximo é '+getDescontoMaximo()+'%.');
+        }
+        
+    }
+
     function showBlocoCm(){
         if(isGranel){
             $(".bloco_cm").hide();
@@ -234,6 +271,16 @@ TelaProduto=(function(){
         else{
             $(".bloco_cm_granel").hide();
             $(".bloco_cm").show();
+        }
+    }
+
+    function showBlocoDesconto(){
+        console.log('des am',getDescontoMaximo());
+        if(getDescontoMaximo()<=0){
+            $(".blocoDesconto").hide();
+        }
+        else{
+            $(".blocoDesconto").show();
         }
     }
 
@@ -265,11 +312,18 @@ TelaProduto=(function(){
     }
 
     function writeValorVenda(){
+       
         $("#formProduto_valor_venda").val(valorFormatado(getValorVenda()));
+        writeValorFinal();
+    }
+
+    function writeValorFinal(){
+        var txDesc= 1 - desconto/100;
+        var vl= getValorVenda() * txDesc;
+        $("#formProduto_valor_final").val(valorFormatado(vl));
     }
 
     function write(){
-      
        showBlocoCm();
        showInfoGrandeza()
        writeCustoMedio();
@@ -284,17 +338,33 @@ TelaProduto=(function(){
         $("#formProduto_produto_id").val(getProdutoId());
        
         $("#formProduto_qtd").val(qtd);
-         isGranel=produtoVendaModel.granel==1;
+        $("#formProduto_desconto").val(produtoVendaModel.desconto);
+        desconto=produtoVendaModel.desconto;
+        isGranel=produtoVendaModel.granel==1;
         $("#formProduto_granel").prop("checked", isGranel);
         //avisar o select2 da mudança ; chamada implicita de write()
         $('#formProduto_produto_id').trigger('change'); 
 
     }
 
+    function setDesconto(valor){
+        if(!valor){
+            valor=0;
+        }
+        desconto=parseFloat(valor);
+    }
+
 
     function onChangeQtd(event){
         setQtd(this.value);
         $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
+    }
+
+    function onChangeDesconto(event){
+        setDesconto(this.value);
+        writeValorFinal();
+        calculoTotal();
+        showMessageDescontoMaximo();
     }
 
     function onChangeGranel(event){
@@ -332,11 +402,13 @@ TelaProduto=(function(){
         qtd=null;
         index=null;
         isGranel=false;
+        desconto=0;
         //valor_venda=null;
         $("#formProduto_id").val('');
         $("#formProduto_produto_id").val('');
         $("#formProduto_qtd").val('');
         $("#formProduto_valor_venda").val('');
+        $("#formProduto_valor_final").val('');
         $("#formProduto_total").val('');
         $("#formProduto_qtd_estoque").val('');
         $("#formProduto_custo_medio").val('');
@@ -344,7 +416,12 @@ TelaProduto=(function(){
         
         $("#formProduto_granel").prop("checked", false);
         $("#formProduto_margem").val('');
+        $("#formProduto_desconto").val('');
         $('#formProduto_produto_id').trigger('change'); //avisar o select2 da mudança
+    }
+
+    function getDesconto(){
+        return desconto;
     }
 
     return {
@@ -362,7 +439,10 @@ TelaProduto=(function(){
         resetFormProduto:resetFormProduto,
         onChangeQtd:onChangeQtd,
         onChangeProduto:onChangeProduto,
-        onChangeGranel:onChangeGranel
+        onChangeGranel:onChangeGranel,
+        onChangeDesconto:onChangeDesconto,
+        writeValorFinal:writeValorFinal,
+        getDesconto:getDesconto
     };
 })();
 //Classe usada para saber o que já tem gravado no backend. Útil para cálculo de qtd Disponível
@@ -401,10 +481,15 @@ function getObjProduct(id) {
 function calculoTotal() {
     var qtd = lerInputNumber("#formProduto_qtd");
     var valor_venda = ler_valor("#formProduto_valor_venda");
-  
+    var desconto = lerInputNumber("#formProduto_desconto");
+    if(!desconto){
+        desconto=0;
+    }
+    var txDesc= 1 - desconto/100;
+
     if (qtd && valor_venda) {
         var total = qtd * valor_venda;
-        $("#formProduto_total").val(valorFormatado(total));
+        $("#formProduto_total").val(valorFormatado(total*txDesc));
 
     } else {
         $("#formProduto_total").val('');
@@ -416,7 +501,10 @@ function calculoTotal() {
 function checkErrors(){
     var qtd= TelaProduto.getQtd();
     var valor_venda= ler_valor("#formProduto_valor_venda");
+    var desconto = lerInputNumber("#formProduto_desconto");
+    var descontoMaximo=TelaProduto.getCurrentProduto()?TelaProduto.getCurrentProduto().desconto_maximo:0;
     var produto_id= TelaProduto.getProdutoId();
+
     var errors=[];
     if(!produto_id){
         errors.push("Produto não Selecionado");
@@ -432,6 +520,9 @@ function checkErrors(){
     
     if(TelaProduto.getQtdDisponivelAtual() < 0){
         errors.push("Qtd maior que Quantidade Disponível");
+    }
+    if(desconto>descontoMaximo){
+        errors.push("Desconto Maior que permitido: "+descontoMaximo+"%");
     }
     return errors;
 }
@@ -492,10 +583,13 @@ $('#ModalFormProduto').on('show.bs.modal',TelaProduto.inicialize);
 $('#formProduto_produto_id').change(TelaProduto.onChangeProduto);
 $("#formProduto_qtd").on("input",TelaProduto.onChangeQtd);
 $("#formProduto_granel").on("input",TelaProduto.onChangeGranel);
+$("#formProduto_desconto").on("input",TelaProduto.onChangeDesconto);
 
-$("#formProduto_qtd, #formProduto_valor_venda, #formProduto_granel ").on("change", function () {
+$("#formProduto_qtd,  #formProduto_granel ").on("input", function () {
     calculoTotal();
 });
+
+
 
 
 

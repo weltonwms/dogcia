@@ -29,7 +29,9 @@ class ProdutoRequest extends FormRequest
             'nome'=>"required",
             'grandeza'=>"required",
             'valor_grandeza'=>$rule1,
-            'margem'=>"required"
+            'margem'=>"required",
+            'valor_venda'=>"required",
+            'desconto_maximo'=>"required"
         ];
     }
 }

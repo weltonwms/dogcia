@@ -34,7 +34,7 @@ class Venda extends Model
     {
         return $this->belongsToMany('App\Produto')
                 ->using('App\ProdutoVenda')
-                ->withPivot('qtd', 'valor_venda', 'custo_medio','granel')
+                ->withPivot('qtd', 'valor_venda', 'custo_medio','granel','desconto')
                 ->withTimestamps();
     }
     
@@ -97,6 +97,7 @@ class Venda extends Model
              $x->produto_id=$produto->id;
              $x->qtd=$produto->pivot->qtd;
              $x->granel=$produto->pivot->granel;
+             $x->desconto=$produto->pivot->desconto;
              $x->valor_venda=$produto->pivot->valor_venda;
              $x->custo_medio=$produto->pivot->custo_medio;
              $list[]=$x;

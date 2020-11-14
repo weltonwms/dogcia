@@ -21,6 +21,7 @@ class CreateProdutosTable extends Migration
             $table->unsignedTinyInteger('grandeza'); //1:Kilo;2:Litro;3:Unitário
             $table->float('valor_grandeza',8,2)->nullable(); //null para unitário
             $table->float('margem',8,2); //% sobre custo médio
+            $table->float('desconto_maximo',8,2)->default(0); //% de desconto permitido na venda
             $table->float('granel',8,2)->default(0);
             $table->decimal('custo_medio', 10, 3)->default(0); //preenchimento automático baseado em compras
             $table->decimal('valor_venda', 10, 2)->default(0);

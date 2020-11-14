@@ -16,15 +16,16 @@ class RelatorioProduto extends Model
     {
 
         $query = \DB::table(function ($q) {
+            $txDesconto="(1 - (pv.desconto/100)) ";
             $q->
                 from('produto_venda as pv')
                 ->join('produtos as p', 'p.id', '=', 'pv.produto_id')
                 ->join('vendas as v', 'v.id', '=', 'pv.venda_id')
-                ->selectRaw('
+                ->selectRaw("
                 produto_id, p.nome, p.grandeza, p.valor_grandeza,
-                SUM(pv.valor_venda*qtd) as total_venda,
+                SUM(pv.valor_venda*qtd *$txDesconto) as total_venda,
                 SUM(IF(pv.granel=1,(pv.custo_medio/p.valor_grandeza)*qtd,pv.custo_medio*qtd)) as total_custo
-                ');
+                ");
                 if (request('data_venda1')):
                     $dt = request('data_venda1');
                     $q->where('v.data_venda', '>=', $dt);

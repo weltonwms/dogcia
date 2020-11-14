@@ -66,7 +66,6 @@
                                 <?php foreach ($produtos as $produto): ?>
                                     <?php 
                                     //calculos de  atributos para js
-                                    $produto->valor_venda=$produto->getValorVenda() ;
                                     $produto->nome_completo=$produto->getNomeCompleto();
                                     $produto->valor_venda_granel=$produto->getValorVendaGranel() ;
                                     ?>
@@ -90,8 +89,32 @@
                             <label for="formProduto_granel" class="col-form-label">Granel:</label>
                             <input class="form-control" type="checkbox" id="formProduto_granel" value="1" style="width:33%" >
                         </div>
+
+                        <div class="form-group col-md-5">
+                            <div class="blocoDesconto">
+                                <label for="formProduto_desconto" class="col-form-label">
+                                    Desconto %:
+                                </label>
+                                <input class="form-control" type="number" id="formProduto_desconto" value="0" min="0">
+                                <span class="MensagemDescontoMaximo" style="color: red;"></span>
+                            </div>
+                           
+                        </div>
+
+                       
+
+                        <div class="form-group col-md-4">
+                            <div class="blocoDesconto">
+                            <label for="formProduto_valor_venda" class="col-form-label">
+                                Valor Sem Desconto:
+                            </label>
+                            <input type="text"  class="form-control money" id="formProduto_valor_venda" readonly>
+                            </div>
+                        </div>
                         
-                        <div class="form-group col-md-5 bloco_cm">
+
+                        <input class="form-control" type="hidden" id="formProduto_custo_medio" >
+                        {{-- <div class="form-group col-md-5 bloco_cm">
                             <label for="formProduto_custo_medio" class="col-form-label">Custo Médio Un:</label>
                             <input class="form-control" type="text" id="formProduto_custo_medio" readonly>
                         </div>
@@ -101,12 +124,12 @@
                                 Custo Médio (por <span class="valor_grandeza"></span>):
                             </label>
                             <input class="form-control" type="text" id="formProduto_custo_medio_granel" readonly>
-                        </div>
+                        </div> --}}
 
-                        <div class="form-group col-md-4">
+                        {{-- <div class="form-group col-md-4">
                             <label for="formProduto_margem" class="col-form-label">Margem %:</label>
                             <input class="form-control" type="number" id="formProduto_margem" readonly>
-                        </div>
+                        </div> --}}
 
 
 
@@ -119,12 +142,17 @@
                             </label>
                             <input type="number" min="0" class="form-control" id="formProduto_qtd">
                         </div>
+                        
                         <div class="form-group col-md-5">
-                            <label for="formProduto_valor" class="col-form-label">
-                                Valor Un. Venda  <span class="info_grandeza"> <span class="valor_grandeza"></span>  </span>:
-                            </label>
-                            <input type="text"  class="form-control money" id="formProduto_valor_venda">
+                            <div>
+                                <label for="formProduto_valor_final" class="col-form-label">
+                                    Valor Un. Venda  <span class="info_grandeza"> <span class="valor_grandeza"></span>  </span>:
+                                </label>
+                                <input type="text"  class="form-control money" id="formProduto_valor_final" readonly>
+                            </div>
+                           
                         </div>
+
                         <div class="form-group col-md-4">
                             <label for="formProduto_total" class="col-form-label">Total:</label>
                             <input type="text" class="form-control" id="formProduto_total" readonly="readonly">

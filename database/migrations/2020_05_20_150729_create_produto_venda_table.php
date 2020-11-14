@@ -19,6 +19,7 @@ class CreateProdutoVendaTable extends Migration
             $table->unsignedBigInteger('venda_id');
             $table->boolean('granel');
             $table->float('qtd');
+            $table->float('desconto',8,2)->default(0); //desconto dado pelo vendedor
             $table->decimal('custo_medio', 10, 3); //histórico momento custo
             $table->decimal('valor_venda', 10, 2);
             $table->timestamps();

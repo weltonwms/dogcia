@@ -14,11 +14,16 @@ class ProdutoVenda extends Pivot
    }
 
     public function getTotal(){
-        return $this->valor_venda * $this->qtd;
+        return $this->getValorVendaComDesconto() * $this->qtd;
     }
 
     public function  getCustoTotal(){
         return $this->custo_medio * $this->qtd;
+    }
+
+    public function getValorVendaComDesconto(){
+        $tx= 1- ($this->desconto/100);
+        return $this->valor_venda*$tx;
     }
 
     public function getTotalFormatado(){
@@ -26,7 +31,7 @@ class ProdutoVenda extends Pivot
     }
 
     public function getValorFormatado(){
-        return "R$ ".number_format($this->valor_venda,2,",",".");
+        return "R$ ".number_format($this->getValorVendaComDesconto(),2,",",".");
     }
 
    

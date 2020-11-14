@@ -60,10 +60,10 @@ class Dashboard extends Model
             $dataClone->addMonth();
         }
 
-       
+        $txDesconto="(1 - (produto_venda.desconto/100)) ";
         $result = \DB::table('produto_venda')
             ->join('vendas', 'produto_venda.venda_id', '=', 'vendas.id')
-            ->selectRaw('MONTH(vendas.data_venda) as mes, YEAR(vendas.data_venda) as ano, SUM(qtd*valor_venda) as total')
+            ->selectRaw("MONTH(vendas.data_venda) as mes, YEAR(vendas.data_venda) as ano, SUM(qtd*valor_venda*$txDesconto) as total")
             ->where('vendas.data_venda', '>=', $dateAtras->format('Y-m-d'))
             ->groupByRaw('MONTH(vendas.data_venda), YEAR(vendas.data_venda)')
             ->get();
@@ -100,18 +100,19 @@ class Dashboard extends Model
             $dataClone->addMonth();
         }
 
-       
+        
         $result= \DB::table(function($query) use($dateAtras){
+            $txDesconto="(1 - (pv.desconto/100)) ";
             $query->
                 from('produto_venda as pv')
                 ->join('vendas', 'pv.venda_id', '=', 'vendas.id')
                 ->join('produtos as p','p.id','=','pv.produto_id')
-                ->selectRaw('
+                ->selectRaw("
                 MONTH(vendas.data_venda) as mes, 
                 YEAR(vendas.data_venda) as ano,
-                SUM(qtd*pv.valor_venda) as total_venda,
+                SUM(qtd*pv.valor_venda*$txDesconto) as total_venda,
                 SUM(IF(pv.granel=0,pv.custo_medio*qtd,(pv.custo_medio/p.valor_grandeza)*qtd))  as custo_total
-                ')
+                ")
             ->where('vendas.data_venda', '>=', $dateAtras->format('Y-m-d'))
             ->groupByRaw('MONTH(vendas.data_venda), YEAR(vendas.data_venda)')
             ->get();
