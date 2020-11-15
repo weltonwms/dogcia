@@ -132,6 +132,11 @@ class Dashboard extends Model
 
     }
 
+    public static function getFretesNaoPagos(){
+       $result= \App\Venda::where('frete','1')->where('status','2')->get();
+       return $result;
+    }
+
 
 
      
