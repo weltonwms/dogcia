@@ -51,6 +51,11 @@
 
         }
 
+        tfoot tr.no-border td {
+            border-top: none;
+
+        }
+
         .destaque {
             background-color: #E5E5DB;
         }
@@ -159,6 +164,19 @@
             </tbody>
 
             <tfoot>
+                @if($venda->frete)
+                <tr class="">
+                    <td colspan="3"> </td>
+                    <td><b>SubTotal:</b></td>
+                    <td class="">{{Util::moneyToBr($venda->getSubtotal(),true)}}</td>
+                </tr>
+    
+                <tr class="no-border">
+                    <td colspan="3"> </td>
+                    <td><b>Frete:</b></td>
+                    <td class="">{{Util::moneyToBr($venda->valor_frete,true)}}</td>
+                </tr>
+                @endif
                 <tr>
                     <td colspan="3"> </td>
                     <td><b>Total Geral</b></td>

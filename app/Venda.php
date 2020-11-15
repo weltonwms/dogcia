@@ -26,7 +26,7 @@ class Venda extends Model
     }
 
     protected $fillable=['cliente_id','data_venda','frete', 'status', 
-    'carteira' ,'forma_pagamento', 'seller_id', 'observacao'];
+    'carteira' ,'forma_pagamento', 'seller_id', 'observacao','valor_frete'];
     protected $dates = array('data_venda');
     
     
@@ -106,7 +106,18 @@ class Venda extends Model
          //return '[{"produto_id":"5","qtd":"37","valor_venda":"10.00"},{"produto_id":"4","qtd":"30","valor_venda":"1.00"}]';
     }
 
+    /**
+     * Total Geral inclui frete
+     */
     public function getTotalGeral(){
+        $vl=$this->frete?$this->valor_frete:0;
+        return $this->getSubtotal()+$vl;
+    }
+
+    /**
+     * Soma de todos os produtos, tirando outras despesas
+     */
+    public function getSubtotal(){
         $total=0;
         foreach($this->produtos as $produto):
             $total+=$produto->pivot->getTotal();
@@ -131,6 +142,15 @@ class Venda extends Model
         if(isset($nomes[$this->forma_pagamento])):
             return $nomes[$this->forma_pagamento];
         endif;
+    }
+
+    public function setValorFreteAttribute($price)
+    {
+        if (!is_numeric($price)):
+            $price = str_replace(".", "", $price);
+            $price = str_replace(",", ".", $price);
+        endif;
+        $this->attributes['valor_frete'] = $price;
     }
     
 }

@@ -33,7 +33,7 @@
         <tfoot>
             <tr>
                 <td colspan="3"></td>
-                <td class="text-center table-primary"><b>Total Geral</b></td>
+                <td class="text-center table-primary"><b>SubTotal</b></td>
                 <td class="table-primary"><span id="total_geral_tabela">0</span></td>
                 <td colspan="2"></td>
             </tr>

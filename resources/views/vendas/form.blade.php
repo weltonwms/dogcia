@@ -10,7 +10,7 @@
         {{ Form::bsDate('data_venda',$dtVenda,['label'=>"Data Venda *"]) }}
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group groupSerVivo">
             <label for="" class="control-label yesno">Frete *</label>
             {{ Form::bsYesno('frete','0') }} 
@@ -18,13 +18,25 @@
 
     </div>
 
-    <div class="col-md-3">
+   
+
+    <div class="col-md-2">
+        <div class="blocoValorFrete">
+            <?php
+            $vlForte= isset($venda)  ? null : 0;
+            ?>
+            {{ Form::bsText('valor_frete',$vlForte,['class'=>"money"]) }}
+        </div>
+    </div>
+
+    <div class="col-md-2">
         <div class="form-group groupSerVivo">
             <label for="" class="control-label yesno">Carteira *</label>
             {{ Form::bsYesno('carteira','0') }} 
           </div>
 
     </div>
+
    
     <div class="col-md-3">
         {{ Form::bsText('observacao',null,['label'=>"Observação"]) }}
@@ -67,7 +79,20 @@
         }
     }
 
+    function showValorFrete(event){
+        var frete= !!parseInt($("[name=frete]:checked").val()); //conversão para boleano
+       if(frete){
+        $(".blocoValorFrete").show();
+       }
+       else{
+        $(".blocoValorFrete").hide();
+        $("#valor_frete").val(0);
+       }
+    }
+
     $("[name=frete], [name=carteira]").change(changeFreteCarteira);
+    $("[name=frete]").on("change",showValorFrete);
+    showValorFrete();
 </script>
 @endpush
 

@@ -70,6 +70,19 @@
             </tr>
             @endforeach
 
+            @if($venda->frete)
+            <tr>
+                <td colspan="5"> </td>
+                <td><b>SubTotal:</b></td>
+                <td class="">{{Util::moneyToBr($venda->getSubtotal(),true)}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="5"> </td>
+                <td><b>Frete:</b></td>
+                <td class="">{{Util::moneyToBr($venda->valor_frete,true)}}</td>
+            </tr>
+            @endif
             <tr>
                 <td colspan="5"> </td>
                 <td><b>Total Geral:</b></td>

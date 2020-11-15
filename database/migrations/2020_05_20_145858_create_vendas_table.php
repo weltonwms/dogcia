@@ -19,6 +19,7 @@ class CreateVendasTable extends Migration
             $table->date('data_venda');
             $table->string('observacao')->nullable();
             $table->boolean('frete');
+            $table->decimal('valor_frete', 10, 2)->default(0);
             $table->boolean('carteira');
             $table->unsignedTinyInteger('status'); //1:Pago;2:Não Pago
             $table->unsignedTinyInteger('forma_pagamento'); //1:Dinheiro;2:Cartão Crédito;3:Cartão Débito
