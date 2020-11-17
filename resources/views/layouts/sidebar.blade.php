@@ -15,11 +15,13 @@
       </a>
     </li>
 
+    @if(auth()->user()->isDono)
     <li>
       <a class="app-menu__item {{Request::segment(1)=='sellers'?'active':null}}" href="{{route('sellers.index')}}">
         <i class="app-menu__icon fa fa-meh-o"></i><span class="app-menu__label">Vendedores</span>
       </a>
     </li>
+   
 
     <li>
       <a class="app-menu__item {{Request::segment(1)=='produtos'?'active':null}}" href="{{route('produtos.index')}}">
@@ -38,7 +40,7 @@
         <i class="app-menu__icon fa fa-bed"></i><span class="app-menu__label">Mortes</span>
       </a>
     </li>
-
+    @endif
     
     <li>
       <a class="app-menu__item {{Request::segment(1)=='vendas'?'active':null}}" href="{{route('vendas.index')}}">
@@ -46,6 +48,7 @@
       </a>
     </li>
 
+    @if(auth()->user()->isDono)
     <li class="treeview">
       <a class="app-menu__item {{Request::segment(1)=='relatorio'?'active':null}}" href="#" data-toggle="treeview">
         <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Relatórios</span>
@@ -87,7 +90,8 @@
         <span class="app-menu__label">Usuários</span>
       </a>
     </li>
-
+    @endif
+    
   </ul>
 
 </aside>

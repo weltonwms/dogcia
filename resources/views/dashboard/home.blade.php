@@ -15,11 +15,11 @@ Sistema Dog e Cia'])
   }
 </style>
 
-
+@if(auth()->user()->isDono)
 {{-- inicio cards --}}
 @include('dashboard.cards')
 {{-- temino cards --}}
-
+@endif
 
 <div class="row">
 
@@ -46,9 +46,12 @@ Sistema Dog e Cia'])
 
 </div>
 
+
+@if(auth()->user()->isDono)
 {{-- inicio charts --}}
 @include('dashboard.charts')
 {{-- temino charts --}}
+@endif
 
 
 

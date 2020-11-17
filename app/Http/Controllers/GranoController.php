@@ -8,6 +8,10 @@ use \App\Grano;
 
 class GranoController extends Controller
 {
+    public function __construct() {
+        $this->middleware('dono');
+    }
+    
    public function edit(Produto $produto)
    {
        if($produto->ser_vivo){

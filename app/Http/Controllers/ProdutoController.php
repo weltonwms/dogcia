@@ -8,6 +8,10 @@ use App\Http\Requests\ProdutoRequest;
 
 class ProdutoController extends Controller
 {
+    public function __construct() {
+        $this->middleware('dono');
+    }
+    
     /**
      * Display a listing of the resource.
      *

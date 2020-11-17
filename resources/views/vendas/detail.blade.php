@@ -50,8 +50,10 @@
                 <th>#</th>
                 <th>Qtd</th>
                 <th>Discriminação</th>
+                @if(auth()->user()->isDono)
                 <th>Custo Un</th>
                 <th>Custo Total</th>
+                @endif
                 <th>Preço Un</th>
                 <th>Total</th>
             </tr>
@@ -63,28 +65,32 @@
                 <td>{{++$key}}</td>
                 <td>{{$produto->pivot->qtd}}</td>
                 <td>{{ProdutoHelper::descricao($produto)}}</td>
+                @if(auth()->user()->isDono)
                 <td>{{Util::moneyToBr(ProdutoHelper::custoMedio($produto),true)}}</td>
                 <td>{{Util::moneyToBr(ProdutoHelper::custoMedioTotal($produto),true)}}</td>
+                @endif
                 <td>{{$produto->pivot->getValorFormatado()}}</td>
                 <td>{{$produto->pivot->getTotalFormatado()}}</td>
             </tr>
             @endforeach
 
+            <?php $colspan=auth()->user()->isDono?"5":"3";?>
+
             @if($venda->frete)
             <tr>
-                <td colspan="5"> </td>
+                <td colspan="{{$colspan}}"> </td>
                 <td><b>SubTotal:</b></td>
                 <td class="">{{Util::moneyToBr($venda->getSubtotal(),true)}}</td>
             </tr>
-
+           
             <tr>
-                <td colspan="5"> </td>
+                <td colspan="{{$colspan}}"> </td>
                 <td><b>Frete:</b></td>
                 <td class="">{{Util::moneyToBr($venda->valor_frete,true)}}</td>
             </tr>
             @endif
             <tr>
-                <td colspan="5"> </td>
+                <td colspan="{{$colspan}}"> </td>
                 <td><b>Total Geral:</b></td>
                 <td class="destaque1">{{Util::moneyToBr($venda->getTotalGeral(),true)}}</td>
             </tr>

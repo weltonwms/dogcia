@@ -10,6 +10,10 @@ use App\RelatorioSeller;
 
 class RelatorioController extends Controller
 {
+    public function __construct() {
+        $this->middleware('dono');
+    }
+
     public function vendas(Request $request)
     {
         $relatorio = new RelatorioVenda();

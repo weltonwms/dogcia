@@ -43,4 +43,8 @@ class User extends Authenticatable
             return $nomes[$this->perfil];
         endif;
     }
+
+    public function getIsDonoAttribute() {
+        return $this->perfil == 1; //retorna true se for igual a 1
+    }
 }

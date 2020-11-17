@@ -8,6 +8,10 @@ use App\Http\Requests\CompraRequest;
 
 class CompraController extends Controller
 {
+    public function __construct() {
+        $this->middleware('dono');
+    }
+    
     /**
      * Display a listing of the resource.
      *

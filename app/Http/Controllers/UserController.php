@@ -11,6 +11,14 @@ use App\Http\Requests\UserSecurityRequest;
 class UserController extends Controller
 {
 
+    public function __construct() {
+        $this->middleware('dono', ['except' => [
+            'showChangePassword', 'updatePassword' 
+        ]]);
+        
+    }
+
+   
 
     public function showChangePassword()
     {

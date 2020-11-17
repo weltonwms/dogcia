@@ -8,6 +8,12 @@ use App\Http\Requests\MorteRequest;
 
 class MorteController extends Controller
 {
+    
+    public function __construct() {
+        $this->middleware('dono');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
