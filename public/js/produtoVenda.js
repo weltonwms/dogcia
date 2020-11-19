@@ -28,6 +28,8 @@ ProdutoVendaModel= (function Produtos() {
     function inicializeItems() {
         var itemsJson = $("#produtos_json").val() || '[]';
         items = JSON.parse(itemsJson);
+        //colocar pv em itemsModel
+        items.forEach(addPvItem);
         //iniciar para edição
         ItensGravados.setItems();
         updateTableProduto();
@@ -78,7 +80,9 @@ ProdutoVendaModel= (function Produtos() {
         var custo_medio=ler_valor("#formProduto_custo_medio");
         var granel=$("#formProduto_granel").is(":checked")?1:0;
         
-        var item = {produto_id: produto_id, qtd: qtd, valor_venda: valor_venda,custo_medio:custo_medio, granel:granel,desconto:desconto};
+        var item = {produto_id: produto_id, qtd: qtd, valor_venda: valor_venda,custo_medio:custo_medio, 
+            granel:granel,desconto:desconto};
+        addPvItem(item);
         if (id) {
             updateItem(item, id);
             $('#ModalFormProduto').modal('hide');
@@ -162,6 +166,7 @@ TelaProduto=(function(){
     var index; //indice do item vendido já salvo na Lista. Usado para Edição
     var isGranel=false;
     var desconto=0;
+    
     //atributos abaixo não são usados devido a suposições de valores de currentProduto ou produtoVendaModel
     var valor_venda; 
     var margem;
@@ -180,6 +185,7 @@ TelaProduto=(function(){
         currentProduto=produto_id?getObjProduct(produto_id):null;
         //ao mudar o currentProduto, setar o model relacionado a esse produto se houver
         produtoVendaModel=ProdutoVendaModel.getProdutoVenda(produto_id);
+       
         //ao mudar o currentProduto atualizar o campo desconto com maxímo permitido
         updateDescontoMaximo();
     }
@@ -204,15 +210,21 @@ TelaProduto=(function(){
 
     function getValorVenda(){
         if(produtoVendaModel){
-            return produtoVendaModel.valor_venda;
+            if(isGranel){
+                var grand= currentProduto.valor_grandeza;
+                return produtoVendaModel.pv/grand;
+            }
+           return produtoVendaModel.pv;
         }
-        if(!currentProduto){
-            return; //não tem como ter valor sem CurrentProduto
+
+        if(currentProduto){
+            if(isGranel){
+                var grand= currentProduto.valor_grandeza; 
+                return currentProduto.valor_venda/grand;
+            }
+            return currentProduto.valor_venda;
         }
-        if(isGranel){
-            return currentProduto.valor_venda_granel;
-        }
-        return currentProduto.valor_venda;
+  
     }
 
     function getCustoMedio(){
@@ -275,7 +287,6 @@ TelaProduto=(function(){
     }
 
     function showBlocoDesconto(){
-        console.log('des am',getDescontoMaximo());
         if(getDescontoMaximo()<=0){
             $(".blocoDesconto").hide();
         }
@@ -312,8 +323,8 @@ TelaProduto=(function(){
     }
 
     function writeValorVenda(){
-       
-        $("#formProduto_valor_venda").val(valorFormatado(getValorVenda()));
+       var vl=getValorVenda();
+       $("#formProduto_valor_venda").val( valorFormatado(vl) );
         writeValorFinal();
     }
 
@@ -327,6 +338,7 @@ TelaProduto=(function(){
        showBlocoCm();
        showInfoGrandeza()
        writeCustoMedio();
+       
        writeValorVenda();
         $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
         $("#formProduto_margem").val(currentProduto.margem);
@@ -371,7 +383,8 @@ TelaProduto=(function(){
         //setGranel(this.value);
         isGranel= $(this).is(":checked");
         showBlocoCm();
-        showInfoGrandeza()
+        showInfoGrandeza();
+       
         writeValorVenda();
               
         $("#formProduto_qtd_estoque").val(getQtdDisponivelAtual());
@@ -453,6 +466,8 @@ ItensGravados=(function(){
         var valor= $('#itensGravados').val() || '[]';
         items = JSON.parse(valor);
         //Object.assign(items,itemsGravados);
+        tratarItems();
+        console.log('itensGravados: ', items)
     }
 
     function getQtdGravadaByProduto(produto_id){
@@ -460,6 +475,11 @@ ItensGravados=(function(){
             return item.produto_id==produto_id;
         });
         return obj?parseFloat(obj.qtd):0;
+    }
+
+    function tratarItems(){
+        //colocar pv em itemsModel
+        items.forEach(addPvItem);
     }
 
    
@@ -475,6 +495,18 @@ function getObjProduct(id) {
         var produtoJson = atob(option.attr('data-obj'));
         var produto = JSON.parse(produtoJson);
         return produto;
+    }
+}
+
+//necessário objeto item possuir atributos: produto_id, granel e valor_venda
+function addPvItem(item){
+    if(item.granel){
+        var obj=getObjProduct(item.produto_id);
+        var grand= obj.valor_grandeza
+        item.pv=item.valor_venda*grand; //recuperando valor_venda sem quebra do granel;
+    }
+    else{
+        item.pv=item.valor_venda;
     }
 }
 

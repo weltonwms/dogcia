@@ -170,6 +170,7 @@ class VendaController extends Controller
         foreach ($produtos as $produto):
             $product = $produto;
             unset($product['produto_id']);
+            unset($product['pv']);//pv é valor_venda sem quebra de granel. Não necessário gravar
             $product['granel']= (isset($produto['granel']) && $produto['granel']==1)?1:0;
             $dados[$produto['produto_id']] = $product;
         endforeach;
